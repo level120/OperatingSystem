@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpUI"
              mc:Ignorable="d" 
-             d:DesignHeight="40" d:DesignWidth="818" Background="#FF007ACC">
+             d:DesignHeight="40" d:DesignWidth="818" Background="#FF82B93A">
     <Grid>
         <Grid HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="403.882" Margin="388.718,0,0,0">
             <StackPanel Orientation="Horizontal" Margin="97.384,0,0,0" >
