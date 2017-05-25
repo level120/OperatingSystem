@@ -10,12 +10,12 @@
         <StackPanel>
             <Label Content="Algorithm List" Foreground="White" FontWeight="Bold" FontSize="18" HorizontalAlignment="Center" HorizontalContentAlignment="Center" />
             <ListBox HorizontalAlignment="Left" Height="570.4" VerticalAlignment="Top" Width="200" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}">
-                <ListBoxItem Foreground="White" FontSize="14" FontWeight="Bold" Height="45">Item1</ListBoxItem>
-                <ListBoxItem Foreground="White" FontSize="14" FontWeight="Bold" Height="45">Item2</ListBoxItem>
-                <ListBoxItem Foreground="White" FontSize="14" FontWeight="Bold" Height="45">Item3</ListBoxItem>
-                <ListBoxItem Foreground="White" FontSize="14" FontWeight="Bold" Height="45">Item4</ListBoxItem>
-                <ListBoxItem Foreground="White" FontSize="14" FontWeight="Bold" Height="45">Item5</ListBoxItem>
-                <ListBoxItem Foreground="White" FontSize="14" FontWeight="Bold" Height="45">Item6</ListBoxItem>
+                <ListBoxItem Foreground="White" Padding="15,0,0,0" FontSize="14" FontWeight="Bold" Height="45"># Item1</ListBoxItem>
+                <ListBoxItem Foreground="White" Padding="15,0,0,0" FontSize="14" FontWeight="Bold" Height="45"># Item2</ListBoxItem>
+                <ListBoxItem Foreground="White" Padding="15,0,0,0" FontSize="14" FontWeight="Bold" Height="45"># Item3</ListBoxItem>
+                <ListBoxItem Foreground="White" Padding="15,0,0,0" FontSize="14" FontWeight="Bold" Height="45"># Item4</ListBoxItem>
+                <ListBoxItem Foreground="White" Padding="15,0,0,0" FontSize="14" FontWeight="Bold" Height="45"># Item5</ListBoxItem>
+                <ListBoxItem Foreground="White" Padding="15,0,0,0" FontSize="14" FontWeight="Bold" Height="45"># Item6</ListBoxItem>
             </ListBox>
         </StackPanel>
 
