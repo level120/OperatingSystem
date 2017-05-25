@@ -54,6 +54,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Algorithm\Common.cs" />
+    <Compile Include="Algorithm\FCFS.cs" />
+    <Compile Include="Algorithm\HRN.cs" />
+    <Compile Include="Algorithm\Priority.cs" />
+    <Compile Include="Algorithm\ProcessData.cs" />
+    <Compile Include="Algorithm\RoundRobin.cs" />
+    <Compile Include="Algorithm\SJF.cs" />
+    <Compile Include="Algorithm\SRT.cs" />
     <Compile Include="TopStatus.xaml.cs">
       <DependentUpon>TopStatus.xaml</DependentUpon>
     </Compile>
@@ -108,7 +116,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Algorithm\" />
     <Folder Include="Icon\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

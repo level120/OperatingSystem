@@ -8,16 +8,16 @@
         Title="CPU Scheduling Simulation" Height="600" Width="1028" ResizeMode="NoResize">
     <Grid x:Name="Layout" Background="#FFEFEFEF">
         <Grid x:Name="Left_Section" HorizontalAlignment="Left" Height="570.4" VerticalAlignment="Top" Width="200" Background="#FF1C1F1F">
-            <local:LeftMenu HorizontalAlignment="Left" Height="550.4" Margin="0,10,0,0" VerticalAlignment="Top" Width="200"/>
+            <local:LeftMenu x:Name="lfMenu" HorizontalAlignment="Left" Height="550.4" Margin="0,10,0,0" VerticalAlignment="Top" Width="200"/>
         </Grid>
         <Grid x:Name="Right_Section" HorizontalAlignment="Left" Height="570.8" Margin="200,0,0,0" VerticalAlignment="Top" Width="818">
             <Grid x:Name="Top" HorizontalAlignment="Left" VerticalAlignment="Top" Width="818">
-                <local:TopStatus HorizontalAlignment="Left" VerticalAlignment="Top" Width="818" Margin="0,0,0,0"/>
+                <local:TopStatus x:Name="topBar" HorizontalAlignment="Left" VerticalAlignment="Top" Width="818" Margin="0,0,0,0"/>
             </Grid>
             <Grid x:Name="Center" HorizontalAlignment="Left" Height="515.8" Margin="10,45,0,0" VerticalAlignment="Top" Width="798">
                 <Grid x:Name="Title" HorizontalAlignment="Left" Height="35.4" VerticalAlignment="Top" Width="798">
-                    <Label Content="Title" HorizontalAlignment="Left" Margin="30,0,0,0" VerticalAlignment="Center" Width="100" FontSize="18" FontWeight="Bold" Foreground="#FF7E8488"/>
-                    <Label Content="&lt; Description &gt;" HorizontalAlignment="Left" Margin="150,0,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Foreground="#FF7E8488"/>
+                    <Label Name="tbTitle" Content="Algorithm Name" HorizontalAlignment="Left" Margin="30,0,0,0" VerticalAlignment="Center" Width="160" FontSize="18" FontWeight="Bold" Foreground="#FF7E8488"/>
+                    <Label Name="tbDescription" Content="&lt; Description &gt;" HorizontalAlignment="Left" Margin="200,0,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Foreground="#FF7E8488"/>
                 </Grid>
                 <Grid x:Name="Contents" HorizontalAlignment="Left" Height="475" VerticalAlignment="Top" Width="798" Margin="0,40.4,0,0">
                     <Grid x:Name="Table" HorizontalAlignment="Left" Height="230" VerticalAlignment="Top" Width="550" Margin="0,0,0,0" Background="White"/>
