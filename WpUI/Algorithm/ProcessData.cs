@@ -28,6 +28,10 @@ namespace AlgorithmTest
             service_time = data[ 4 ];
         }
 
+        public override string ToString()
+        {
+            return string.Format( no + "\t" + pid + "\t" + priority + "\t" + arrived_time + "\t" + service_time );
+        }
     }
 
     class Cal_Temp

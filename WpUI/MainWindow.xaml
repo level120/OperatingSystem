@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpUI"
+        xmlns:mschart="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
         mc:Ignorable="d"
         Title="CPU Scheduling Simulation" Height="600" Width="1028" ResizeMode="NoResize">
     <Grid x:Name="Layout" Background="#FFEFEFEF">
@@ -18,12 +19,36 @@
                 <Grid x:Name="Title" HorizontalAlignment="Left" Height="35.4" VerticalAlignment="Top" Width="798">
                     <Label Name="tbTitle" Content="Algorithm Name" HorizontalAlignment="Left" Margin="30,0,0,0" VerticalAlignment="Center" Width="160" FontSize="18" FontWeight="Bold" Foreground="#FF7E8488"/>
                     <Label Name="tbDescription" Content="&lt; Description &gt;" HorizontalAlignment="Left" Margin="200,0,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Foreground="#FF7E8488"/>
+                    <Button Name="btnRun" Content="Run" HorizontalAlignment="Right" VerticalAlignment="Center" Width="65" Height="22" Click="btnRun_Click" Visibility="Hidden"/>
                 </Grid>
                 <Grid x:Name="Contents" HorizontalAlignment="Left" Height="475" VerticalAlignment="Top" Width="798" Margin="0,40.4,0,0">
-                    <Grid x:Name="Table" HorizontalAlignment="Left" Height="230" VerticalAlignment="Top" Width="550" Margin="0,0,0,0" Background="White"/>
-                    <Grid x:Name="Chart" HorizontalAlignment="Left" Height="230" VerticalAlignment="Top" Width="550" Margin="0,241,0,0" Background="White"/>
-                    <Grid x:Name="Wait_Time" HorizontalAlignment="Left" Height="230" VerticalAlignment="Top" Width="243" Margin="561,0,0,0" Background="White"/>
-                    <Grid x:Name="Return_Time" HorizontalAlignment="Left" Height="230" VerticalAlignment="Top" Width="243" Margin="561,241,0,0" Background="White"/>
+                    <Grid x:Name="Table" HorizontalAlignment="Left" Height="230" VerticalAlignment="Top" Width="550" Margin="0,0,0,0" Background="White">
+                        <DataGrid Name="tableProcess" AutoGenerateColumns="False" SelectionMode="Single" CanUserAddRows="False" SelectionUnit="FullRow" HorizontalAlignment="Left" Margin="0.0,0" VerticalAlignment="Top" Width="550" Height="230" BorderBrush="{x:Null}" Background="{x:Null}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn x:Name="PTHeader1" Header="No." Width="80*" Binding="{Binding no, Mode=TwoWay}"/>
+                                <DataGridTextColumn x:Name="PTHeader2" Header="PID" Width="80*" Binding="{Binding pid, Mode=TwoWay}"/>
+                                <DataGridTextColumn x:Name="PTHeader3" Header="우선순위" Width="80*" Binding="{Binding priority, Mode=TwoWay}"/>
+                                <DataGridTextColumn x:Name="PTHeader4" Header="도착시간" Width="80*" Binding="{Binding arrived_time, Mode=TwoWay}"/>
+                                <DataGridTextColumn x:Name="PTHeader5" Header="서비스시간" Width="80*" Binding="{Binding service_time, Mode=TwoWay}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                    </Grid>
+                    <Grid x:Name="Chart" HorizontalAlignment="Left" Height="230" VerticalAlignment="Top" Width="550" Margin="0,241,0,0" Background="White">
+                        <WindowsFormsHost x:Name="WFH_Process">
+                            <mschart:Chart x:Name="chartProcess"/>
+                        </WindowsFormsHost>
+                    </Grid>
+                    <Grid x:Name="Wait_Time" HorizontalAlignment="Left" Height="230" VerticalAlignment="Top" Width="243" Margin="561,0,0,0" Background="White">
+                        <WindowsFormsHost x:Name="WFH_Wait">
+                            <mschart:Chart x:Name="chartWait"/>
+                        </WindowsFormsHost>
+                    </Grid>
+                    <Grid x:Name="Return_Time" HorizontalAlignment="Left" Height="230" VerticalAlignment="Top" Width="243" Margin="561,241,0,0" Background="White">
+                        <WindowsFormsHost x:Name="WFH_Return">
+                            <mschart:Chart x:Name="chartReturn"/>
+                        </WindowsFormsHost>
+                    </Grid>
                 </Grid>
             </Grid>
         </Grid>
