@@ -24,7 +24,7 @@ namespace WpUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        private enum proc { FCFS = 1, SJF, SRT, HRN, ROUNDROBIN, PRIORITY };
+        private enum proc { FCFS = 1, SJF, SRT, HRN, PRIORITY, ROUNDROBIN };
         private int select_flag = -1;   // 1:fcfs, 2:sjf, 3:srt, 4:hrn, 5:priority, 6:round_robin, 0:No page
 
         private FCFS        fcfs;
@@ -78,6 +78,8 @@ namespace WpUI
             select_flag = ( int )proc.FCFS;
             tbTitle.Content = "F C F S";
             tbDescription.Content = @":  먼저 들어온 순서대로 처리합니다.";
+            lbTimequantum.Visibility = Visibility.Hidden;
+            sliderTimequantum.Visibility = Visibility.Hidden;
         }
         /* SJF */
         private void Item2_Clicked()
@@ -85,6 +87,8 @@ namespace WpUI
             select_flag = ( int )proc.SJF;
             tbTitle.Content = "S J F";
             tbDescription.Content = @":  서비스 시간이 가장 짧은 순서대로 처리합니다.";
+            lbTimequantum.Visibility = Visibility.Hidden;
+            sliderTimequantum.Visibility = Visibility.Hidden;
         }
         /* SRT */
         private void Item3_Clicked()
@@ -92,6 +96,8 @@ namespace WpUI
             select_flag = ( int )proc.SRT;
             tbTitle.Content = "S R T";
             tbDescription.Content = @":  SJF의 선점형 구조로서 매번 누가 짧은지 확인하여 처리합니다.";
+            lbTimequantum.Visibility = Visibility.Hidden;
+            sliderTimequantum.Visibility = Visibility.Hidden;
         }
         /* HRN */
         private void Item4_Clicked()
@@ -99,6 +105,8 @@ namespace WpUI
             select_flag = ( int )proc.HRN;
             tbTitle.Content = "H R N";
             tbDescription.Content = @":  설명이 필요합니다.";
+            lbTimequantum.Visibility = Visibility.Hidden;
+            sliderTimequantum.Visibility = Visibility.Hidden;
         }
         /* Priority */
         private void Item5_Clicked()
@@ -106,6 +114,8 @@ namespace WpUI
             select_flag = ( int )proc.PRIORITY;
             tbTitle.Content = "Priority";
             tbDescription.Content = @":  선점형이며 우선순위가 높은 순서대로 처리합니다.";
+            lbTimequantum.Visibility = Visibility.Hidden;
+            sliderTimequantum.Visibility = Visibility.Hidden;
         }
         /* Round-Robin */
         private void Item6_Clicked()
@@ -113,6 +123,8 @@ namespace WpUI
             select_flag = ( int )proc.ROUNDROBIN;
             tbTitle.Content = "Round-Robin";
             tbDescription.Content = @":  Time Quantum 단위로 처리합니다.";
+            lbTimequantum.Visibility = Visibility.Visible;
+            sliderTimequantum.Visibility = Visibility.Visible;
         }
 
         /* Run */
@@ -140,9 +152,13 @@ namespace WpUI
             chartProcess.ChartAreas.Add( "GanttArea" );
             chartWait.ChartAreas.Add( "PieArea" );
             chartReturn.ChartAreas.Add( "PieArea" );
+
+            chartWait.Titles.Add( "평균대기시간" );
+            chartReturn.Titles.Add( "평균반환시간" );
         }
 
-        /* Chart Update */
+        #region Drawing Chart Area
+        /* Gantt Chart Update */
         private void ProcessUpdate( List<ProcessData> chart )
         {
             chartProcess.Series.Clear();
@@ -160,6 +176,43 @@ namespace WpUI
             chartProcess.Series.Add( seriesGantt );
             chartProcess.Update();
         }
+
+        /* Wait Chart Update */
+        private void WaitUpdate()
+        {
+            string[] name = new string[] { "FCFS", "SJF", "SRT", "HRN", "Priority", "Round-Robin" };
+            chartWait.Series.Clear();
+
+            Series seriesPie = new Series();
+            seriesPie.ChartType = SeriesChartType.Pie;
+
+            for ( int i = 0; i < wait_time.Length; i++ )
+            {
+                seriesPie.Points.AddXY( name[ i ], wait_time[ i ] );
+            }
+            
+            chartWait.Series.Add( seriesPie );
+            chartWait.Update();
+        }
+
+        /* Return Time Chart Update */
+        private void ReturnUpdate()
+        {
+            string[] name = new string[] { "FCFS", "SJF", "SRT", "HRN", "Priority", "Round-Robin" };
+            chartReturn.Series.Clear();
+
+            Series seriesPie = new Series();
+            seriesPie.ChartType = SeriesChartType.Pie;
+
+            for ( int i = 0; i < return_time.Length; i++ )
+            {
+                seriesPie.Points.AddXY( name[ i ], return_time[ i ] );
+            }
+
+            chartReturn.Series.Add( seriesPie );
+            chartReturn.Update();
+        }
+        #endregion
 
         /* DataGrid Changing */
         private void CreateTables()
@@ -194,30 +247,42 @@ namespace WpUI
         {
             try
             {
-                running();
+                if ( select_flag > 0 )
+                {
+                    running();
+                }
+                else
+                {
+                    MessageBox.Show( "알고리즘 기법이 선택되지 않았습니다.\n확인 후 다시 작업을 요청하십시오.", "오류", MessageBoxButton.OK, MessageBoxImage.Error );
+                }
             }
             catch
             {
-                MessageBox.Show( "테이블에 올바르지 않은 값이 포함되어 있습니다.\n확인 후 다시 작업을 요청하십시오.", "오류", MessageBoxButton.OK, MessageBoxImage.Error );
+                MessageBox.Show("테이블에 올바르지 않은 값이 포함되어 있습니다.\n확인 후 다시 작업을 요청하십시오.", "오류", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private void running()
         {
-            int time_quantum = 1;
+            int time_quantum = Convert.ToInt32( sliderTimequantum.Value );
             //data = get_data();        // 얕은 복사 실행(이 코드에선 사용금지)
             List<ProcessData> tmp = GenericCopier<List<ProcessData>>.DeepCopy( get_data() );    // 깊은 복사 실행
-            data = tmp;
+            List<ProcessData> data_fcfs = GenericCopier<List<ProcessData>>.DeepCopy( tmp );    // 깊은 복사 실행
+            List<ProcessData> data_sjf = GenericCopier<List<ProcessData>>.DeepCopy( tmp );    // 깊은 복사 실행
+            List<ProcessData> data_srt = GenericCopier<List<ProcessData>>.DeepCopy( tmp );    // 깊은 복사 실행
+            List<ProcessData> data_hrn = GenericCopier<List<ProcessData>>.DeepCopy( tmp );    // 깊은 복사 실행
+            List<ProcessData> data_prio = GenericCopier<List<ProcessData>>.DeepCopy( tmp );    // 깊은 복사 실행
+            List<ProcessData> data_rrb = GenericCopier<List<ProcessData>>.DeepCopy( tmp );    // 깊은 복사 실행
 
             //foreach ( var i in data )
             //    Console.WriteLine( i.ToString() );
 
-            fcfs    = new FCFS( data );
-            sjf     = new SJF( data );
-            srt     = new SRT( data );
-            hrn     = new HRN( data );
-            prio    = new Priority( data );
-            rrb     = new RoundRobin( data, time_quantum );
+            fcfs    = new FCFS( data_fcfs );
+            sjf     = new SJF( data_sjf );
+            srt     = new SRT( data_srt );
+            hrn     = new HRN( data_hrn );
+            prio    = new Priority( data_prio );
+            rrb     = new RoundRobin( data_rrb, time_quantum );
 
             List<ProcessData> temp = new List<ProcessData>();
 
@@ -225,21 +290,33 @@ namespace WpUI
             {
                 case ( int )proc.FCFS:
                     temp = fcfs.working();
+                    sjf.working(); srt.working();hrn.working();
+                    prio.working(); rrb.working();
                     break;
                 case ( int )proc.SJF:
                     temp = sjf.working();
+                    fcfs.working(); srt.working();
+                    hrn.working(); prio.working(); rrb.working();
                     break;
                 case ( int )proc.SRT:
                     temp = srt.working();
+                    fcfs.working(); sjf.working();
+                    hrn.working(); prio.working(); rrb.working();
                     break;
                 case ( int )proc.HRN:
                     temp = hrn.working();
+                    fcfs.working(); sjf.working(); srt.working();
+                    prio.working(); rrb.working();
                     break;
                 case ( int )proc.PRIORITY:
                     temp = prio.working();
+                    fcfs.working(); sjf.working(); srt.working();
+                    hrn.working(); rrb.working();
                     break;
                 case ( int )proc.ROUNDROBIN:
                     temp = rrb.working();
+                    fcfs.working(); sjf.working(); srt.working();
+                    hrn.working(); prio.working();
                     break;
                 default:
                     MessageBox.Show( "올바르지 않은 접근입니다.\n확인 후 다시 작업을 요청하십시오.", "오류", MessageBoxButton.OK, MessageBoxImage.Error );
@@ -250,14 +327,14 @@ namespace WpUI
             //foreach ( var i in data )
             //    Console.WriteLine( i.ToString() );
 
-            //wait_time[ ( int )proc.FCFS - 1 ] = fcfs.avg_wait();
+            wait_time[ ( int )proc.FCFS - 1 ] = fcfs.avg_wait();
             wait_time[ ( int )proc.SJF - 1 ] = sjf.avg_wait();
             wait_time[ ( int )proc.SRT - 1 ] = srt.avg_wait();
             wait_time[ ( int )proc.HRN - 1 ] = hrn.avg_wait();
             wait_time[ ( int )proc.PRIORITY - 1 ] = prio.avg_wait();
             wait_time[ ( int )proc.ROUNDROBIN - 1 ] = rrb.avg_wait();
 
-            //return_time[ ( int )proc.FCFS - 1 ] = fcfs.avg_return();
+            return_time[ ( int )proc.FCFS - 1 ] = fcfs.avg_return();
             return_time[ ( int )proc.SJF - 1 ] = sjf.avg_return();
             return_time[ ( int )proc.SRT - 1 ] = srt.avg_return();
             return_time[ ( int )proc.HRN - 1 ] = hrn.avg_return();
@@ -265,6 +342,8 @@ namespace WpUI
             return_time[ ( int )proc.ROUNDROBIN - 1 ] = rrb.avg_return();
 
             ProcessUpdate( temp );
+            WaitUpdate();
+            ReturnUpdate();
         }
 
         private List<ProcessData> get_data()

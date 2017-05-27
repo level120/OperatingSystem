@@ -103,22 +103,6 @@ namespace AlgorithmTest
             {
                 estimate_data.Add( new ProcessData( new string[] { "" + data[ i ].no, "" + data[ i ].pid, "" + data[ i ].priority, "" + start_time[ i ], "" + data[ i ].service_time } ) );
             }
-
-
-            for ( int i = 0; i < data.Count; i++ )
-            {
-                Console.WriteLine( "sum of" + sum_of_waitingtime[ i ] );
-            }
-
-            for ( int i = 0; i < data.Count; i++ )
-            {
-                Console.WriteLine( "시작" + start_time[ i ] );
-            }
-
-            for ( int i = 0; i < data.Count; i++ )
-            {
-                Console.WriteLine( "waiting" + process_waiting_time[ i ] );
-            }
             return estimate_data;
         }
 
@@ -135,7 +119,7 @@ namespace AlgorithmTest
             {
                 if ( i == 0 )
                 {
-                    return_time.Add( process_service_time[ i ] );
+                    return_time.Add( process_service_time[ 0 ] );
                 }
                 else
                 {

@@ -115,9 +115,9 @@ namespace AlgorithmTest
 
         public double avg_wait()
         {
-            foreach ( var i in delay_data )
-                Console.Write( i + "\t" );
-            Console.WriteLine( "\n" );
+            //foreach ( var i in delay_data )
+            //    Console.Write( i + "\t" );
+            //Console.WriteLine( "\n" );
 
             return delay_data.Sum() / ( double )delay_data.Count;
         }
@@ -127,9 +127,9 @@ namespace AlgorithmTest
             for ( int i = 0; i < return_data.Count; i++ )
             {
                 return_data[ i ] += delay_data[ i ];
-                Console.Write( return_data[ i ] + "\t" );
+                //Console.Write( return_data[ i ] + "\t" );
             }
-            Console.WriteLine( "\n" );
+            //Console.WriteLine( "\n" );
 
             return return_data.Sum() / ( double )return_data.Count;
         }

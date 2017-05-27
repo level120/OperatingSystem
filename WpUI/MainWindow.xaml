@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:WpUI"
         xmlns:mschart="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
         mc:Ignorable="d"
+        Icon="App.ico"
         Title="CPU Scheduling Simulation" Height="600" Width="1028" ResizeMode="NoResize">
     <Grid x:Name="Layout" Background="#FFEFEFEF">
         <Grid x:Name="Left_Section" HorizontalAlignment="Left" Height="570.4" VerticalAlignment="Top" Width="200" Background="#FF1C1F1F">
@@ -19,6 +20,8 @@
                 <Grid x:Name="Title" HorizontalAlignment="Left" Height="35.4" VerticalAlignment="Top" Width="798">
                     <Label Name="tbTitle" Content="Algorithm Name" HorizontalAlignment="Left" Margin="30,0,0,0" VerticalAlignment="Center" Width="160" FontSize="18" FontWeight="Bold" Foreground="#FF7E8488"/>
                     <Label Name="tbDescription" Content="&lt; Description &gt;" HorizontalAlignment="Left" Margin="200,0,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Foreground="#FF7E8488"/>
+                    <Label Name="lbTimequantum" Content="CPU Time" Margin="575,0,0,0" Height="25" FontSize="12" FontWeight="Bold" Foreground="#FF7E8488" Visibility="Hidden" />
+                    <Slider Name="sliderTimequantum" Margin="550,0,0,0" Height="25" Minimum="1" Value="1" Width="60" TickPlacement="Both" SmallChange="1" AutoToolTipPlacement="TopLeft" ToolTip="CPU Time을 설정합니다" Maximum="5" Visibility="Hidden" />
                     <Button Name="btnRun" Content="Run" HorizontalAlignment="Right" VerticalAlignment="Center" Width="65" Height="22" Click="btnRun_Click" Visibility="Hidden"/>
                 </Grid>
                 <Grid x:Name="Contents" HorizontalAlignment="Left" Height="475" VerticalAlignment="Top" Width="798" Margin="0,40.4,0,0">

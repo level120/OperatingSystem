@@ -4,15 +4,21 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpUI"
+             xmlns:ToggleSwitch="clr-namespace:ToggleSwitch;assembly=ToggleSwitch"
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="818" Background="#FF82B93A">
     <Grid>
+        <Label Margin="20,0,0,0" Width="140" Height="30" HorizontalAlignment="Left" >
+            <Label.Background>
+                <ImageBrush ImageSource="logo.png"/>
+            </Label.Background>
+        </Label>
         <Grid HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="403.882" Margin="388.718,0,0,0">
             <StackPanel Orientation="Horizontal" Margin="97.384,0,0,0" >
                 <Label Content="개수" Margin="0,0,0,0" Height="25" FontWeight="Bold" Foreground="Black" />
-                <Slider Name="sliderProcess" Margin="15,0,0,0" Height="25" Minimum="1" Value="5" Width="100" TickPlacement="Both" SmallChange="1" AutoToolTipPlacement="TopLeft" />
-                <ToggleButton Name="tgBtn" Content="Auto" Margin="15,7,0,7" Width="60" IsChecked="True"/>
-                <Button Content="실행" Margin="15,7,0,7" Width="60" PreviewMouseDown="Button_PreviewMouseDown" />
+                <Slider Name="sliderProcess" Margin="15,0,0,0" Height="25" Minimum="1" Value="5" Width="100" TickPlacement="Both" SmallChange="1" AutoToolTipPlacement="TopLeft" ToolTip="프로세스의 개수를 설정합니다" />
+                <ToggleSwitch:HorizontalToggleSwitch x:Name="tgBtn" HorizontalAlignment="Left" Height="20" Margin="10,0,10,0" VerticalAlignment="Stretch" Width="84" IsChecked="True" UncheckedContent="수동" CheckedContent="자동" ToolTip="프로세스 생성 방법을 결정합니다."/>
+                <Button Content="R" Margin="15,7,0,7" Width="30" PreviewMouseDown="Button_PreviewMouseDown" />
             </StackPanel>
         </Grid>
     </Grid>
