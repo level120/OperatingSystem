@@ -1,7 +1,9 @@
 ﻿using AlgorithmTest;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -24,7 +26,6 @@ namespace WpUI
     {
         private enum proc { FCFS = 1, SJF, SRT, HRN, ROUNDROBIN, PRIORITY };
         private int select_flag = -1;   // 1:fcfs, 2:sjf, 3:srt, 4:hrn, 5:priority, 6:round_robin, 0:No page
-        private int selected_flag = -1;
 
         private FCFS        fcfs;
         private SJF         sjf;
@@ -120,7 +121,6 @@ namespace WpUI
             tableProcess.IsReadOnly = true;
             btnRun.Visibility = Visibility.Visible;
             CreateTables();
-            selected_flag = -1;
         }
         private void Run_Static()
         {
@@ -128,7 +128,6 @@ namespace WpUI
             PTHeader1.IsReadOnly = PTHeader2.IsReadOnly = true;
             btnRun.Visibility = Visibility.Visible;
             CreateTables();
-            selected_flag = -1;
         }
         #endregion
 
@@ -167,21 +166,17 @@ namespace WpUI
         {
             Random rand = new Random();
             int limit = Convert.ToInt32( topBar.sliderProcess.Value );
-
-            if ( data.Count > 0 )
-            {
-                data.RemoveRange( 0, data.Count );
-            }
+            List<ProcessData> temp = new List<ProcessData>();
             
             for ( int i = 0; i < limit; i++ )
             {
                 if ( ( bool )topBar.tgBtn.IsChecked )
-                    data.Add( new ProcessData() { no = "" + ( i + 1 ), pid = "" + ( Common.START_PID + i ), priority = "" + rand.Next( 8 ), arrived_time = "" + ( rand.Next( 10 ) + 1 ), service_time = "" + ( rand.Next( 10 ) + 1 ) } );
+                    temp.Add( new ProcessData() { no = "" + ( i + 1 ), pid = "" + ( Common.START_PID + i ), priority = "" + rand.Next( 8 ), arrived_time = "" + ( rand.Next( 10 ) + 1 ), service_time = "" + ( rand.Next( 10 ) + 1 ) } );
                 else
-                    data.Add( new ProcessData() { no = "" + ( i + 1 ), pid = "" + ( Common.START_PID + i ), priority = "", arrived_time = "", service_time = "" } );
+                    temp.Add( new ProcessData() { no = "" + ( i + 1 ), pid = "" + ( Common.START_PID + i ), priority = "", arrived_time = "", service_time = "" } );
             }
 
-            tableProcess.ItemsSource = data;
+            tableProcess.ItemsSource = temp;
             tableProcess.Items.Refresh();
         }
 
@@ -199,11 +194,9 @@ namespace WpUI
         {
             try
             {
-                if ( selected_flag != select_flag )
-                {
-                    running();
-                }
-            } catch
+                running();
+            }
+            catch
             {
                 MessageBox.Show( "테이블에 올바르지 않은 값이 포함되어 있습니다.\n확인 후 다시 작업을 요청하십시오.", "오류", MessageBoxButton.OK, MessageBoxImage.Error );
             }
@@ -212,9 +205,9 @@ namespace WpUI
         private void running()
         {
             int time_quantum = 1;
-
-            selected_flag = select_flag;
-            data = get_data();
+            //data = get_data();        // 얕은 복사 실행(이 코드에선 사용금지)
+            List<ProcessData> tmp = GenericCopier<List<ProcessData>>.DeepCopy( get_data() );    // 깊은 복사 실행
+            data = tmp;
 
             //foreach ( var i in data )
             //    Console.WriteLine( i.ToString() );
@@ -284,6 +277,21 @@ namespace WpUI
             }
 
             return res;
+        }
+    }
+
+    /* Deep Copy를 위해 반드시 필요 */
+    public static class GenericCopier<T>
+    {
+        public static T DeepCopy( object objectToCopy )
+        {
+            using ( MemoryStream memoryStream = new MemoryStream() )
+            {
+                BinaryFormatter binaryFormatter = new BinaryFormatter();
+                binaryFormatter.Serialize( memoryStream, objectToCopy );
+                memoryStream.Position = 0;
+                return ( T )binaryFormatter.Deserialize( memoryStream );
+            }
         }
     }
 }

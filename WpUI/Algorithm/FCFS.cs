@@ -11,13 +11,11 @@ namespace AlgorithmTest
         private List<int> process_service_time;
         private List<int> process_arrived_time;
         private List<ProcessData> data;
-        //프로세스 서비스타임으로 연산된 프로세스의 대기시간이 들어감
-        //평균대기시간도 계산가능
         private List<int> process_waiting_time;
         private List<int> sum_of_waitingtime;
-        //반환시간
         private List<int> return_time;
         private List<ProcessData> estimate_data;
+        private List<int> start_time;
         double waiting_time_sum;
         double returng_time_sum;
 
@@ -28,12 +26,11 @@ namespace AlgorithmTest
             process_arrived_time = new List<int>();
             process_waiting_time = new List<int>();
             sum_of_waitingtime = new List<int>();
+            start_time = new List<int>();
             return_time = new List<int>();
             estimate_data = new List<ProcessData>();
             this.data = new List<ProcessData>();
             this.data = pre_data;
-
-            // working();
         }
 
         public List<ProcessData> working()
@@ -47,12 +44,14 @@ namespace AlgorithmTest
                 process_service_time.Add( Convert.ToInt32( data[ i ].service_time
                     ) );
             }
+
             //process_arrived_time에 data.arrivedtime을 넣음
             for ( int i = 0; i < data.Count; i++ )
             {
                 process_arrived_time.Add( Convert.ToInt32( data[ i ].arrived_time
                     ) );
             }
+
             //sum_of_waitingtime
             for ( int i = 0; i < data.Count; i++ )
             {
@@ -65,30 +64,63 @@ namespace AlgorithmTest
                     sum_of_waitingtime.Add( process_service_time[ i ] );
                 }
             }
+
             //process_waiting_time
             for ( int i = 0; i < data.Count; i++ )
             {
                 if ( i != 0 )
                 {
-                    process_waiting_time.Add( process_waiting_time[ i - 1 ] + process_service_time[ i - 1 ] );
-                    //process_waiting_time.Add( sum_of_waitingtime[ i - 1 ] - process_arrived_time[ i ] );
+                    process_waiting_time.Add( sum_of_waitingtime[ i - 1 ] - process_arrived_time[ i ] );
                 }
                 else
                 {
                     process_waiting_time.Add( process_arrived_time[ i ] );
                 }
             }
+            //start_time
+            for ( int i = 0; i < data.Count; i++ )
+            {
+                if ( i == 0 )
+                {
+                    start_time.Add( process_arrived_time[ 0 ] );
+                }
+                else
+                    if ( ( start_time[ i - 1 ] + process_service_time[ i - 1 ] ) >= ( process_arrived_time[ i ] ) )
+                {
+                    start_time.Add( start_time[ i - 1 ] + process_service_time[ i - 1 ] );
+                }
+                else
+                {
+                    start_time.Add( process_arrived_time[ i ] );
+                }
+
+
+            }
+
+
+            //estimate_data
+            for ( int i = 0; i < data.Count; i++ )
+            {
+                estimate_data.Add( new ProcessData( new string[] { "" + data[ i ].no, "" + data[ i ].pid, "" + data[ i ].priority, "" + start_time[ i ], "" + data[ i ].service_time } ) );
+            }
+
 
             for ( int i = 0; i < data.Count; i++ )
             {
-
-                estimate_data.Add( new ProcessData( new string[] { "" + data[ i ].no, "" + data[ i ].pid, "" + data[ i ].priority, "" + process_waiting_time[i], "" + data[ i ].service_time } ) );
+                Console.WriteLine( "sum of" + sum_of_waitingtime[ i ] );
             }
-            
-            return estimate_data;
 
+            for ( int i = 0; i < data.Count; i++ )
+            {
+                Console.WriteLine( "시작" + start_time[ i ] );
+            }
+
+            for ( int i = 0; i < data.Count; i++ )
+            {
+                Console.WriteLine( "waiting" + process_waiting_time[ i ] );
+            }
+            return estimate_data;
         }
-        // no work
 
 
         public double avg_wait()
@@ -101,7 +133,15 @@ namespace AlgorithmTest
         {
             for ( int i = 0; i < data.Count; i++ )
             {
-                return_time.Add( sum_of_waitingtime[ i ] - process_arrived_time[ i ] );
+                if ( i == 0 )
+                {
+                    return_time.Add( process_service_time[ i ] );
+                }
+                else
+                {
+                    return_time.Add( sum_of_waitingtime[ i ] - process_arrived_time[ i ] );
+                }
+
             }
             returng_time_sum = return_time.Sum();
 
@@ -109,3 +149,4 @@ namespace AlgorithmTest
         }
     }
 }
+

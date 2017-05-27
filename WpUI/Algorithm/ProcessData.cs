@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace AlgorithmTest
 {
+    [Serializable]
     class ProcessData
     {
         public string no { get; set; }
