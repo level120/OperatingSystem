@@ -70,7 +70,14 @@ namespace AlgorithmTest
             {
                 if ( i != 0 )
                 {
-                    process_waiting_time.Add( sum_of_waitingtime[ i - 1 ] - process_arrived_time[ i ] );
+                    if ( sum_of_waitingtime[ i - 1 ] - process_arrived_time[ i ] < 0 )
+                    {
+                        process_waiting_time.Add( 0 );
+                    }
+                    else
+                    {
+                        process_waiting_time.Add( sum_of_waitingtime[ i - 1 ] - process_arrived_time[ i ] );
+                    }
                 }
                 else
                 {
@@ -119,7 +126,11 @@ namespace AlgorithmTest
             {
                 if ( i == 0 )
                 {
-                    return_time.Add( process_service_time[ 0 ] );
+                    return_time.Add( process_service_time[ i ] );
+                }
+                else if ( sum_of_waitingtime[ i ] - process_arrived_time[ i ] < 1 )
+                {
+                    return_time.Add( 1 );
                 }
                 else
                 {

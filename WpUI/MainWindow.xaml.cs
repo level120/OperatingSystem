@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Forms.DataVisualization.Charting;
@@ -80,6 +81,7 @@ namespace WpUI
             tbDescription.Content = @":  먼저 들어온 순서대로 처리합니다.";
             lbTimequantum.Visibility = Visibility.Hidden;
             sliderTimequantum.Visibility = Visibility.Hidden;
+            set_color( false );
         }
         /* SJF */
         private void Item2_Clicked()
@@ -89,6 +91,7 @@ namespace WpUI
             tbDescription.Content = @":  서비스 시간이 가장 짧은 순서대로 처리합니다.";
             lbTimequantum.Visibility = Visibility.Hidden;
             sliderTimequantum.Visibility = Visibility.Hidden;
+            set_color( false );
         }
         /* SRT */
         private void Item3_Clicked()
@@ -98,6 +101,7 @@ namespace WpUI
             tbDescription.Content = @":  SJF의 선점형 구조로서 매번 누가 짧은지 확인하여 처리합니다.";
             lbTimequantum.Visibility = Visibility.Hidden;
             sliderTimequantum.Visibility = Visibility.Hidden;
+            set_color( false );
         }
         /* HRN */
         private void Item4_Clicked()
@@ -107,6 +111,7 @@ namespace WpUI
             tbDescription.Content = @":  설명이 필요합니다.";
             lbTimequantum.Visibility = Visibility.Hidden;
             sliderTimequantum.Visibility = Visibility.Hidden;
+            set_color( false );
         }
         /* Priority */
         private void Item5_Clicked()
@@ -116,6 +121,7 @@ namespace WpUI
             tbDescription.Content = @":  선점형이며 우선순위가 높은 순서대로 처리합니다.";
             lbTimequantum.Visibility = Visibility.Hidden;
             sliderTimequantum.Visibility = Visibility.Hidden;
+            set_color( true );
         }
         /* Round-Robin */
         private void Item6_Clicked()
@@ -125,6 +131,7 @@ namespace WpUI
             tbDescription.Content = @":  Time Quantum 단위로 처리합니다.";
             lbTimequantum.Visibility = Visibility.Visible;
             sliderTimequantum.Visibility = Visibility.Visible;
+            set_color( false );
         }
 
         /* Run */
@@ -230,7 +237,7 @@ namespace WpUI
                 else
                     temp.Add( new ProcessData() { no = "" + ( i + 1 ), pid = "" + ( Common.START_PID + i ), priority = "", arrived_time = "", service_time = "" } );
             }
-
+            
             tableProcess.ItemsSource = temp;
             tableProcess.Items.Refresh();
         }
@@ -352,6 +359,57 @@ namespace WpUI
 
             return res;
         }
+
+        #region Change Table Color
+        /* Change Color */
+        private void set_color( bool flag )
+        {
+            if ( !flag )
+            {
+                for ( int i = 0; i < tableProcess.Items.Count; i++ )
+                {
+                    DataGridCell cell = GetCell( i, 2, tableProcess );
+                    cell.Background =  new SolidColorBrush( Color.FromRgb( 140, 140, 140 ) );
+                }
+            }
+            else
+            {
+                for ( int i = 0; i < tableProcess.Items.Count; i++ )
+                {
+                    DataGridCell cell = GetCell( i, 2, tableProcess );
+                    cell.Background = new SolidColorBrush( Color.FromRgb( 255, 255, 255 ) );
+                }
+            }
+        }
+
+        public DataGridCell GetCell( int rowIndex, int columnIndex, DataGrid dg )
+        {
+            DataGridRow row = dg.ItemContainerGenerator.ContainerFromIndex( rowIndex ) as DataGridRow;
+            DataGridCellsPresenter p = GetVisualChild<DataGridCellsPresenter>( row );
+            DataGridCell cell = p.ItemContainerGenerator.ContainerFromIndex( columnIndex ) as DataGridCell;
+            return cell;
+        }
+
+        static T GetVisualChild<T>( Visual parent ) where T : Visual
+        {
+            T child = default( T );
+            int numVisuals = VisualTreeHelper.GetChildrenCount( parent );
+            for ( int i = 0; i < numVisuals; i++ )
+            {
+                Visual v = ( Visual )VisualTreeHelper.GetChild( parent, i );
+                child = v as T;
+                if ( child == null )
+                {
+                    child = GetVisualChild<T>( v );
+                }
+                if ( child != null )
+                {
+                    break;
+                }
+            }
+            return child;
+        }
+        #endregion
     }
 
     /* Deep Copy를 위해 반드시 필요 */
