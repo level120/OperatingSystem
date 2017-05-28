@@ -39,6 +39,8 @@ namespace WpUI
         private double[]            wait_time;
         private double[]            return_time;
 
+        private object thislock = new object();     // 임계구역 Flag (Critical Section)
+
         #region define delegate and events
         public delegate void item1_Click();
         public delegate void item2_Click();
@@ -137,16 +139,43 @@ namespace WpUI
         /* Run */
         private void Run_Auto()
         {
-            tableProcess.IsReadOnly = true;
-            btnRun.Visibility = Visibility.Visible;
-            CreateTables();
+            /* Set Critical Section */
+            lock ( thislock )
+            {
+                tableProcess.IsReadOnly = true;
+                btnRun.Visibility = Visibility.Visible;
+                CreateTables();
+
+                if ( select_flag == ( int )proc.PRIORITY )
+                {
+                    set_color( true );
+                }
+                else
+                {
+                    set_color( false );
+                }
+            }
         }
+
         private void Run_Static()
         {
-            tableProcess.IsReadOnly = false;
-            PTHeader1.IsReadOnly = PTHeader2.IsReadOnly = true;
-            btnRun.Visibility = Visibility.Visible;
-            CreateTables();
+            /* Set Critical Section */
+            lock ( thislock )
+            {
+                tableProcess.IsReadOnly = false;
+                PTHeader1.IsReadOnly = PTHeader2.IsReadOnly = true;
+                btnRun.Visibility = Visibility.Visible;
+                CreateTables();
+
+                if ( select_flag == ( int )proc.PRIORITY )
+                {
+                    set_color( true );
+                }
+                else
+                {
+                    set_color( false );
+                }
+            }
         }
         #endregion
 
@@ -385,6 +414,12 @@ namespace WpUI
         public DataGridCell GetCell( int rowIndex, int columnIndex, DataGrid dg )
         {
             DataGridRow row = dg.ItemContainerGenerator.ContainerFromIndex( rowIndex ) as DataGridRow;
+            if ( row == null )
+            {
+                dg.UpdateLayout();
+                dg.ScrollIntoView( dg.Items[ rowIndex ] );
+                row = ( DataGridRow )dg.ItemContainerGenerator.ContainerFromIndex( rowIndex ) as DataGridRow;
+            }
             DataGridCellsPresenter p = GetVisualChild<DataGridCellsPresenter>( row );
             DataGridCell cell = p.ItemContainerGenerator.ContainerFromIndex( columnIndex ) as DataGridCell;
             return cell;
