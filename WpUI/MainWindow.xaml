@@ -44,12 +44,20 @@
                     </Grid>
                     <Grid x:Name="Wait_Time" HorizontalAlignment="Left" Height="230" VerticalAlignment="Top" Width="243" Margin="561,0,0,0" Background="White">
                         <WindowsFormsHost x:Name="WFH_Wait">
-                            <mschart:Chart x:Name="chartWait"/>
+                            <mschart:Chart x:Name="chartWait">
+                                <mschart:Chart.Legends>
+                                    <mschart:Legend Docking="Bottom"/>
+                                </mschart:Chart.Legends>
+                            </mschart:Chart>
                         </WindowsFormsHost>
                     </Grid>
                     <Grid x:Name="Return_Time" HorizontalAlignment="Left" Height="230" VerticalAlignment="Top" Width="243" Margin="561,241,0,0" Background="White">
                         <WindowsFormsHost x:Name="WFH_Return">
-                            <mschart:Chart x:Name="chartReturn"/>
+                            <mschart:Chart x:Name="chartReturn">
+                                <mschart:Chart.Legends>
+                                    <mschart:Legend Docking="Bottom"/>
+                                </mschart:Chart.Legends>
+                            </mschart:Chart>
                         </WindowsFormsHost>
                     </Grid>
                 </Grid>

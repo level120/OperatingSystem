@@ -192,6 +192,7 @@ namespace WpUI
             }
             
             chartWait.Series.Add( seriesPie );
+            chartWait.Series[ 0 ].IsValueShownAsLabel = true;
             chartWait.Update();
         }
 
@@ -210,6 +211,7 @@ namespace WpUI
             }
 
             chartReturn.Series.Add( seriesPie );
+            chartReturn.Series[ 0 ].IsValueShownAsLabel = true;
             chartReturn.Update();
         }
         #endregion
@@ -328,6 +330,7 @@ namespace WpUI
             //    Console.WriteLine( i.ToString() );
 
             wait_time[ ( int )proc.FCFS - 1 ] = fcfs.avg_wait();
+            wait_time[ ( int )proc.FCFS - 1 ] = 1;
             wait_time[ ( int )proc.SJF - 1 ] = sjf.avg_wait();
             wait_time[ ( int )proc.SRT - 1 ] = srt.avg_wait();
             wait_time[ ( int )proc.HRN - 1 ] = hrn.avg_wait();
@@ -335,6 +338,7 @@ namespace WpUI
             wait_time[ ( int )proc.ROUNDROBIN - 1 ] = rrb.avg_wait();
 
             return_time[ ( int )proc.FCFS - 1 ] = fcfs.avg_return();
+            return_time[ ( int )proc.FCFS - 1 ] = 1;
             return_time[ ( int )proc.SJF - 1 ] = sjf.avg_return();
             return_time[ ( int )proc.SRT - 1 ] = srt.avg_return();
             return_time[ ( int )proc.HRN - 1 ] = hrn.avg_return();
