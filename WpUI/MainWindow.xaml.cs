@@ -39,7 +39,7 @@ namespace WpUI
         private double[]            wait_time;
         private double[]            return_time;
 
-        private object thislock = new object();     // 임계구역 Flag (Critical Section)
+        private readonly object thislock = new object();     // 임계구역 Flag (Critical Section)
 
         #region define delegate and events
         public delegate void item1_Click();
@@ -305,6 +305,13 @@ namespace WpUI
             int time_quantum = Convert.ToInt32( sliderTimequantum.Value );
             //data = get_data();        // 얕은 복사 실행(이 코드에선 사용금지)
             List<ProcessData> tmp = GenericCopier<List<ProcessData>>.DeepCopy( get_data() );    // 깊은 복사 실행
+
+            if ( !checkValues( tmp ) )
+            {
+                MessageBox.Show( "테이블에 0 이하의 값 혹은 빈 문자가 포함되어 있습니다.\n확인 후 다시 작업을 요청하십시오.", "오류", MessageBoxButton.OK, MessageBoxImage.Error );
+                return;
+            }
+
             List<ProcessData> data_fcfs = GenericCopier<List<ProcessData>>.DeepCopy( tmp );    // 깊은 복사 실행
             List<ProcessData> data_sjf = GenericCopier<List<ProcessData>>.DeepCopy( tmp );    // 깊은 복사 실행
             List<ProcessData> data_srt = GenericCopier<List<ProcessData>>.DeepCopy( tmp );    // 깊은 복사 실행
@@ -358,19 +365,19 @@ namespace WpUI
                     return;
             }
 
-            wait_time[ ( int )proc.FCFS - 1 ] = fcfs.avg_wait();
-            wait_time[ ( int )proc.SJF - 1 ] = sjf.avg_wait();
-            wait_time[ ( int )proc.SRT - 1 ] = srt.avg_wait();
-            wait_time[ ( int )proc.HRN - 1 ] = hrn.avg_wait();
-            wait_time[ ( int )proc.PRIORITY - 1 ] = prio.avg_wait();
-            wait_time[ ( int )proc.ROUNDROBIN - 1 ] = rrb.avg_wait();
+            wait_time[ ( int )proc.FCFS - 1 ] = Convert.ToDouble( string.Format( "{0:#0.00}", fcfs.avg_wait() ) );
+            wait_time[ ( int )proc.SJF - 1 ] = Convert.ToDouble( string.Format( "{0:#0.00}", sjf.avg_wait() ) );
+            wait_time[ ( int )proc.SRT - 1 ] = Convert.ToDouble( string.Format( "{0:#0.00}", srt.avg_wait() ) );
+            wait_time[ ( int )proc.HRN - 1 ] = Convert.ToDouble( string.Format( "{0:#0.00}", hrn.avg_wait() ) );
+            wait_time[ ( int )proc.PRIORITY - 1 ] = Convert.ToDouble( string.Format( "{0:#0.00}", prio.avg_wait() ) );
+            wait_time[ ( int )proc.ROUNDROBIN - 1 ] = Convert.ToDouble( string.Format( "{0:#0.00}", rrb.avg_wait() ) );
 
-            return_time[ ( int )proc.FCFS - 1 ] = fcfs.avg_return();
-            return_time[ ( int )proc.SJF - 1 ] = sjf.avg_return();
-            return_time[ ( int )proc.SRT - 1 ] = srt.avg_return();
-            return_time[ ( int )proc.HRN - 1 ] = hrn.avg_return();
-            return_time[ ( int )proc.PRIORITY - 1 ] = prio.avg_return();
-            return_time[ ( int )proc.ROUNDROBIN - 1 ] = rrb.avg_return();
+            return_time[ ( int )proc.FCFS - 1 ] = Convert.ToDouble( string.Format( "{0:#0.00}", fcfs.avg_return() ) );
+            return_time[ ( int )proc.SJF - 1 ] = Convert.ToDouble( string.Format( "{0:#0.00}", sjf.avg_return() ) );
+            return_time[ ( int )proc.SRT - 1 ] = Convert.ToDouble( string.Format( "{0:#0.00}", srt.avg_return() ) );
+            return_time[ ( int )proc.HRN - 1 ] = Convert.ToDouble( string.Format( "{0:#0.00}", hrn.avg_return() ) );
+            return_time[ ( int )proc.PRIORITY - 1 ] = Convert.ToDouble( string.Format( "{0:#0.00}", prio.avg_return() ) );
+            return_time[ ( int )proc.ROUNDROBIN - 1 ] = Convert.ToDouble( string.Format( "{0:#0.00}", rrb.avg_return() ) );
 
             ProcessUpdate( temp );
             WaitUpdate();
@@ -384,6 +391,39 @@ namespace WpUI
             foreach ( ProcessData item in tableProcess.ItemsSource )
             {
                 res.Add( item );
+            }
+
+            return res;
+        }
+
+        private bool checkValues(List<ProcessData> list)
+        {
+            bool res = true;
+            
+            foreach ( ProcessData item in list )
+            {
+                if ( item.priority != null && item.arrived_time != null && item.arrived_time != null )
+                {
+                    if ( item.priority != "" && item.arrived_time != "" && item.arrived_time != "" )
+                    {
+                        if ( Convert.ToInt32( item.priority ) > -1 && Convert.ToInt32( item.arrived_time ) > 0 && Convert.ToInt32( item.service_time ) > 0 )
+                        {
+                            res &= true;
+                        }
+                        else
+                        {
+                            res &= false;
+                        }
+                    }
+                    else
+                    {
+                        res &= false;
+                    }
+                }
+                else
+                {
+                    res &= false;
+                }
             }
 
             return res;

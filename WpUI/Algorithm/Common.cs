@@ -42,7 +42,7 @@ namespace AlgorithmTest
         /* 우선순위 정렬 */
         private static int Follow_Priority( ProcessData A, ProcessData B )
         {
-            if ( Convert.ToInt32( A.priority ) >= Convert.ToInt32( B.priority ) )
+            if ( Convert.ToInt32( A.priority ) <= Convert.ToInt32( B.priority ) )
                 return -1;
             return 1;
         }
