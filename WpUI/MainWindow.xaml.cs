@@ -81,8 +81,8 @@ namespace WpUI
             select_flag = ( int )proc.FCFS;
             tbTitle.Content = "F C F S";
             tbDescription.Content = @":  먼저 들어온 순서대로 처리합니다.";
-            lbTimequantum.Visibility = Visibility.Hidden;
-            sliderTimequantum.Visibility = Visibility.Hidden;
+            lfMenu.lbTimequantum.Visibility = Visibility.Hidden;
+            lfMenu.sliderTimequantum.Visibility = Visibility.Hidden;
             set_color( false );
         }
         /* SJF */
@@ -91,8 +91,8 @@ namespace WpUI
             select_flag = ( int )proc.SJF;
             tbTitle.Content = "S J F";
             tbDescription.Content = @":  서비스 시간이 가장 짧은 순서대로 처리합니다.";
-            lbTimequantum.Visibility = Visibility.Hidden;
-            sliderTimequantum.Visibility = Visibility.Hidden;
+            lfMenu.lbTimequantum.Visibility = Visibility.Hidden;
+            lfMenu.sliderTimequantum.Visibility = Visibility.Hidden;
             set_color( false );
         }
         /* SRT */
@@ -101,8 +101,8 @@ namespace WpUI
             select_flag = ( int )proc.SRT;
             tbTitle.Content = "S R T";
             tbDescription.Content = @":  SJF의 선점형 구조로서 매번 누가 짧은지 확인하여 처리합니다.";
-            lbTimequantum.Visibility = Visibility.Hidden;
-            sliderTimequantum.Visibility = Visibility.Hidden;
+            lfMenu.lbTimequantum.Visibility = Visibility.Hidden;
+            lfMenu.sliderTimequantum.Visibility = Visibility.Hidden;
             set_color( false );
         }
         /* HRN */
@@ -111,8 +111,8 @@ namespace WpUI
             select_flag = ( int )proc.HRN;
             tbTitle.Content = "H R N";
             tbDescription.Content = @":  설명이 필요합니다.";
-            lbTimequantum.Visibility = Visibility.Hidden;
-            sliderTimequantum.Visibility = Visibility.Hidden;
+            lfMenu.lbTimequantum.Visibility = Visibility.Hidden;
+            lfMenu.sliderTimequantum.Visibility = Visibility.Hidden;
             set_color( false );
         }
         /* Priority */
@@ -121,8 +121,8 @@ namespace WpUI
             select_flag = ( int )proc.PRIORITY;
             tbTitle.Content = "Priority";
             tbDescription.Content = @":  선점형이며 우선순위가 높은 순서대로 처리합니다.";
-            lbTimequantum.Visibility = Visibility.Hidden;
-            sliderTimequantum.Visibility = Visibility.Hidden;
+            lfMenu.lbTimequantum.Visibility = Visibility.Hidden;
+            lfMenu.sliderTimequantum.Visibility = Visibility.Hidden;
             set_color( true );
         }
         /* Round-Robin */
@@ -131,8 +131,8 @@ namespace WpUI
             select_flag = ( int )proc.ROUNDROBIN;
             tbTitle.Content = "Round-Robin";
             tbDescription.Content = @":  Time Quantum 단위로 처리합니다.";
-            lbTimequantum.Visibility = Visibility.Visible;
-            sliderTimequantum.Visibility = Visibility.Visible;
+            lfMenu.lbTimequantum.Visibility = Visibility.Visible;
+            lfMenu.sliderTimequantum.Visibility = Visibility.Visible;
             set_color( false );
         }
 
@@ -184,11 +184,12 @@ namespace WpUI
             data        = new List<ProcessData>();
             wait_time   = new double[ 6 ];
             return_time = new double[ 6 ];
-
+            
             chartProcess.ChartAreas.Add( "GanttArea" );
             chartWait.ChartAreas.Add( "PieArea" );
             chartReturn.ChartAreas.Add( "PieArea" );
 
+            chartProcess.Titles.Add( "스케쥴링 결과" );
             chartWait.Titles.Add( "평균대기시간" );
             chartReturn.Titles.Add( "평균반환시간" );
         }
@@ -302,13 +303,13 @@ namespace WpUI
 
         private void running()
         {
-            int time_quantum = Convert.ToInt32( sliderTimequantum.Value );
+            int time_quantum = Convert.ToInt32( lfMenu.sliderTimequantum.Value );
             //data = get_data();        // 얕은 복사 실행(이 코드에선 사용금지)
             List<ProcessData> tmp = GenericCopier<List<ProcessData>>.DeepCopy( get_data() );    // 깊은 복사 실행
 
             if ( !checkValues( tmp ) )
             {
-                MessageBox.Show( "테이블에 0 이하의 값 혹은 빈 문자가 포함되어 있습니다.\n확인 후 다시 작업을 요청하십시오.", "오류", MessageBoxButton.OK, MessageBoxImage.Error );
+                MessageBox.Show( "테이블 값의 범위는 우선순위 0~9, 나머지는 1~30 이어야 합니다.\n확인 후 다시 작업을 요청하십시오.", "오류", MessageBoxButton.OK, MessageBoxImage.Error );
                 return;
             }
 
@@ -408,7 +409,14 @@ namespace WpUI
                     {
                         if ( Convert.ToInt32( item.priority ) > -1 && Convert.ToInt32( item.arrived_time ) > 0 && Convert.ToInt32( item.service_time ) > 0 )
                         {
-                            res &= true;
+                            if ( Convert.ToInt32( item.priority ) < 10 && Convert.ToInt32( item.arrived_time ) < 31 && Convert.ToInt32( item.service_time ) < 31 )
+                            {
+                                res &= true;
+                            }
+                            else
+                            {
+                                res &= false;
+                            }
                         }
                         else
                         {
@@ -485,6 +493,19 @@ namespace WpUI
             return child;
         }
         #endregion
+
+        private void tableProcess_Sorting( object sender, RoutedEvent e )
+        {
+            switch ( select_flag )
+            {
+                case ( int )proc.PRIORITY:
+                    set_color( true );
+                    break;
+                default:
+                    set_color( false );
+                    break;
+            }
+        }
     }
 
     /* Deep Copy를 위해 반드시 필요 */

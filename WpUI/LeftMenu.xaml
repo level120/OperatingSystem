@@ -9,7 +9,7 @@
     <Grid>
         <StackPanel>
             <Label Content="Algorithm List" Foreground="White" FontWeight="Bold" FontSize="18" HorizontalAlignment="Center" HorizontalContentAlignment="Center" />
-            <ListBox HorizontalAlignment="Left" Height="570.4" VerticalAlignment="Top" Width="200" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}">
+            <ListBox HorizontalAlignment="Left" Height="358" VerticalAlignment="Top" Width="200" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}">
                 <ListBoxItem Name="item1" Foreground="White" Padding="15,0,0,0" FontSize="14" FontWeight="Bold" Height="45" PreviewMouseDown="item1_PreviewMouseDown" ToolTip="FCFS(비선점) 기법을 선택합니다"># FCFS</ListBoxItem>
                 <ListBoxItem Name="item2" Foreground="White" Padding="15,0,0,0" FontSize="14" FontWeight="Bold" Height="45" PreviewMouseDown="item2_PreviewMouseDown" ToolTip="SJF(비선점) 기법을 선택합니다"># S J F</ListBoxItem>
                 <ListBoxItem Name="item3" Foreground="White" Padding="15,0,0,0" FontSize="14" FontWeight="Bold" Height="45" PreviewMouseDown="item3_PreviewMouseDown" ToolTip="SRT(선점) 기법을 선택합니다"># S R T</ListBoxItem>
@@ -17,6 +17,8 @@
                 <ListBoxItem Name="item5" Foreground="White" Padding="15,0,0,0" FontSize="14" FontWeight="Bold" Height="45" PreviewMouseDown="item5_PreviewMouseDown" ToolTip="우선순위(선점) 기법을 선택합니다"># Priority</ListBoxItem>
                 <ListBoxItem Name="item6" Foreground="White" Padding="15,0,0,0" FontSize="14" FontWeight="Bold" Height="45" PreviewMouseDown="item6_PreviewMouseDown" ToolTip="Round-Robin(선점) 기법을 선택합니다"># Round-Robin</ListBoxItem>
             </ListBox>
+            <Label Name="lbTimequantum" HorizontalAlignment="Center" Content="CPU Time" Height="30" FontSize="14" FontWeight="Bold" Foreground="#FF7E8488" Visibility="Hidden" />
+            <Slider Name="sliderTimequantum" Height="25" Minimum="1" Value="1" Width="100" TickPlacement="Both" SmallChange="1" AutoToolTipPlacement="TopLeft" ToolTip="CPU Time을 설정합니다" Maximum="5" Visibility="Hidden" />
         </StackPanel>
 
     </Grid>

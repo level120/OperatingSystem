@@ -36,13 +36,11 @@
                 <Grid x:Name="Title" HorizontalAlignment="Left" Height="35.4" VerticalAlignment="Top" Width="798">
                     <Label Name="tbTitle" Content="Algorithm Name" HorizontalAlignment="Left" Margin="30,0,0,0" VerticalAlignment="Center" Width="160" FontSize="18" FontWeight="Bold" Foreground="#FF7E8488"/>
                     <Label Name="tbDescription" Content="&lt; Description &gt;" HorizontalAlignment="Left" Margin="200,0,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Foreground="#FF7E8488"/>
-                    <Label Name="lbTimequantum" Content="CPU Time" Margin="575,0,0,0" Height="25" FontSize="12" FontWeight="Bold" Foreground="#FF7E8488" Visibility="Hidden" />
-                    <Slider Name="sliderTimequantum" Margin="550,0,0,0" Height="25" Minimum="1" Value="1" Width="60" TickPlacement="Both" SmallChange="1" AutoToolTipPlacement="TopLeft" ToolTip="CPU Time을 설정합니다" Maximum="5" Visibility="Hidden" />
                     <Button Name="btnRun" Content="Run" HorizontalAlignment="Right" VerticalAlignment="Center" Width="65" Height="22" Click="btnRun_Click" Visibility="Hidden"/>
                 </Grid>
                 <Grid x:Name="Contents" HorizontalAlignment="Left" Height="475" VerticalAlignment="Top" Width="798" Margin="0,40.4,0,0">
                     <Grid x:Name="Table" HorizontalAlignment="Left" Height="230" VerticalAlignment="Top" Width="550" Margin="0,0,0,0" Background="White">
-                        <DataGrid Name="tableProcess" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AutoGenerateColumns="False" SelectionMode="Single" CanUserAddRows="False" CanUserDeleteRows="False" SelectionUnit="Cell" HorizontalAlignment="Left" Margin="0.0,0" VerticalAlignment="Top" Width="550" Height="230" BorderBrush="{x:Null}" Background="{x:Null}" CanUserResizeRows="False" RowHeight="20">
+                        <DataGrid Name="tableProcess" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" HorizontalAlignment="Left" Margin="0.0,0" VerticalAlignment="Top" Width="550" Height="230" BorderBrush="{x:Null}" Background="{x:Null}" CanUserResizeRows="False" RowHeight="20" SelectionMode="Single" >
                             <DataGrid.Columns>
                                 <DataGridTextColumn x:Name="PTHeader1" Header="No." HeaderStyle="{StaticResource CenterAlignmentColumnHeaderStyle}" Width="80*" Binding="{Binding no, Mode=TwoWay}" CellStyle="{StaticResource CenterCellStyle}"/>
                                 <DataGridTextColumn x:Name="PTHeader2" Header="PID" HeaderStyle="{StaticResource CenterAlignmentColumnHeaderStyle}" Width="80*" Binding="{Binding pid, Mode=TwoWay}" CellStyle="{StaticResource CenterCellStyle}"/>
@@ -50,6 +48,41 @@
                                 <DataGridTextColumn x:Name="PTHeader4" Header="도착시간" HeaderStyle="{StaticResource CenterAlignmentColumnHeaderStyle}" Width="80*" Binding="{Binding arrived_time, Mode=TwoWay}" CellStyle="{StaticResource CenterCellStyle}"/>
                                 <DataGridTextColumn x:Name="PTHeader5" Header="서비스시간" HeaderStyle="{StaticResource CenterAlignmentColumnHeaderStyle}" Width="80*" Binding="{Binding service_time, Mode=TwoWay}" CellStyle="{StaticResource CenterCellStyle}"/>
                             </DataGrid.Columns>
+                            <DataGrid.RowDetailsTemplate>
+                                <DataTemplate>
+                                    <Border BorderThickness="1" BorderBrush="Black" Background="AliceBlue" Margin="4" Padding="4">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="100"/>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition Width="100"/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+
+                                            <TextBlock Grid.ColumnSpan="4" FontFamily="Arial" FontSize="20" FontWeight="Bold" Text="PID : "/>
+                                            <TextBlock Grid.ColumnSpan="4" FontFamily="Arial" FontSize="20" FontWeight="Bold" Margin="50,0,0,0" Text="{Binding pid}"/>
+                                            <TextBlock Grid.Row="1" FontWeight="Bold" Text="Arrived Time : "/>
+                                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding arrived_time}"/>
+                                            <TextBlock Grid.Row="1" Grid.Column="1" Text="ms" Margin="17,0,0,0"/>
+
+                                            <TextBlock Grid.Row="1" Grid.Column="2" FontWeight="Bold" Text="Priority : "/>
+                                            <TextBlock Grid.Row="1" Grid.Column="3" Text="{Binding priority}"/>
+
+                                            <TextBlock Grid.Row="2" FontWeight="Bold" Text="Service Time : "/>
+                                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding service_time}"/>
+                                            <TextBlock Grid.Row="2" Grid.Column="1" Text="ms" Margin="17,0,0,0"/>
+
+                                            <!--<TextBlock Grid.Row="2" Grid.Column="2" FontWeight="Bold" Text="Magnetic Field?"/>
+                                            <TextBlock Grid.Row="2" Grid.Column="3" Text="{Binding no}"/>-->
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </DataGrid.RowDetailsTemplate>
                         </DataGrid>
 
                     </Grid>
