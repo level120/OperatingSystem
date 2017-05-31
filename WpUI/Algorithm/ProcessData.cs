@@ -14,10 +14,13 @@ namespace AlgorithmTest
         public string priority { get; set; }
         public string arrived_time { get; set; }
         public string service_time { get; set; }
+        public string wait_time { get; set; }
+        public string return_time { get; set; }
 
         public ProcessData()
         {
             no = pid = priority = arrived_time = service_time = "";
+            wait_time = return_time = "-";
         }
 
         public ProcessData( string[] data )

@@ -83,7 +83,9 @@ namespace WpUI
             tbDescription.Content = @":  먼저 들어온 순서대로 처리합니다.";
             lfMenu.lbTimequantum.Visibility = Visibility.Hidden;
             lfMenu.sliderTimequantum.Visibility = Visibility.Hidden;
+            tableProcess.UnselectAll();
             set_color( false );
+            ChangeTables();
         }
         /* SJF */
         private void Item2_Clicked()
@@ -93,7 +95,9 @@ namespace WpUI
             tbDescription.Content = @":  서비스 시간이 가장 짧은 순서대로 처리합니다.";
             lfMenu.lbTimequantum.Visibility = Visibility.Hidden;
             lfMenu.sliderTimequantum.Visibility = Visibility.Hidden;
+            tableProcess.UnselectAll();
             set_color( false );
+            ChangeTables();
         }
         /* SRT */
         private void Item3_Clicked()
@@ -103,7 +107,9 @@ namespace WpUI
             tbDescription.Content = @":  SJF의 선점형 구조로서 매번 누가 짧은지 확인하여 처리합니다.";
             lfMenu.lbTimequantum.Visibility = Visibility.Hidden;
             lfMenu.sliderTimequantum.Visibility = Visibility.Hidden;
+            tableProcess.UnselectAll();
             set_color( false );
+            ChangeTables();
         }
         /* HRN */
         private void Item4_Clicked()
@@ -113,7 +119,9 @@ namespace WpUI
             tbDescription.Content = @":  설명이 필요합니다.";
             lfMenu.lbTimequantum.Visibility = Visibility.Hidden;
             lfMenu.sliderTimequantum.Visibility = Visibility.Hidden;
+            tableProcess.UnselectAll();
             set_color( false );
+            ChangeTables();
         }
         /* Priority */
         private void Item5_Clicked()
@@ -123,7 +131,9 @@ namespace WpUI
             tbDescription.Content = @":  선점형이며 우선순위가 높은 순서대로 처리합니다.";
             lfMenu.lbTimequantum.Visibility = Visibility.Hidden;
             lfMenu.sliderTimequantum.Visibility = Visibility.Hidden;
+            tableProcess.UnselectAll();
             set_color( true );
+            ChangeTables();
         }
         /* Round-Robin */
         private void Item6_Clicked()
@@ -133,7 +143,9 @@ namespace WpUI
             tbDescription.Content = @":  Time Quantum 단위로 처리합니다.";
             lfMenu.lbTimequantum.Visibility = Visibility.Visible;
             lfMenu.sliderTimequantum.Visibility = Visibility.Visible;
+            tableProcess.UnselectAll();
             set_color( false );
+            ChangeTables();
         }
 
         /* Run */
@@ -145,6 +157,9 @@ namespace WpUI
                 tableProcess.IsReadOnly = true;
                 btnRun.Visibility = Visibility.Visible;
                 CreateTables();
+                tableProcess.UnselectAll();
+                tableProcess.SelectionUnit = DataGridSelectionUnit.FullRow;
+                ChangeTables();
 
                 if ( select_flag == ( int )proc.PRIORITY )
                 {
@@ -166,6 +181,9 @@ namespace WpUI
                 PTHeader1.IsReadOnly = PTHeader2.IsReadOnly = true;
                 btnRun.Visibility = Visibility.Visible;
                 CreateTables();
+                tableProcess.UnselectAll();
+                tableProcess.SelectionUnit = DataGridSelectionUnit.Cell;
+                ChangeTables();
 
                 if ( select_flag == ( int )proc.PRIORITY )
                 {
@@ -258,17 +276,29 @@ namespace WpUI
         {
             Random rand = new Random();
             int limit = Convert.ToInt32( topBar.sliderProcess.Value );
-            List<ProcessData> temp = new List<ProcessData>();
+
+            data.Clear();
             
             for ( int i = 0; i < limit; i++ )
             {
                 if ( ( bool )topBar.tgBtn.IsChecked )
-                    temp.Add( new ProcessData() { no = "" + ( i + 1 ), pid = "" + ( Common.START_PID + i ), priority = "" + rand.Next( 8 ), arrived_time = "" + ( rand.Next( 10 ) + 1 ), service_time = "" + ( rand.Next( 10 ) + 1 ) } );
+                    data.Add( new ProcessData() { no = "" + ( i + 1 ), pid = "" + ( Common.START_PID + i ), priority = "" + rand.Next( 8 ), arrived_time = "" + ( rand.Next( 10 ) + 1 ), service_time = "" + ( rand.Next( 10 ) + 1 ) } );
                 else
-                    temp.Add( new ProcessData() { no = "" + ( i + 1 ), pid = "" + ( Common.START_PID + i ), priority = "", arrived_time = "", service_time = "" } );
+                    data.Add( new ProcessData() { no = "" + ( i + 1 ), pid = "" + ( Common.START_PID + i ), priority = "0", arrived_time = "", service_time = "" } );
             }
             
-            tableProcess.ItemsSource = temp;
+            tableProcess.ItemsSource = data;
+            tableProcess.Items.Refresh();
+        }
+
+        /* When No Running */
+        private void ChangeTables()
+        {
+            foreach(var i in data )
+            {
+                i.wait_time = i.return_time = "-";
+            }
+            tableProcess.ItemsSource = data;
             tableProcess.Items.Refresh();
         }
 
@@ -286,9 +316,20 @@ namespace WpUI
         {
             try
             {
+                tableProcess.UnselectAll();
+                
                 if ( select_flag > 0 )
                 {
                     running();
+
+                    if ( select_flag == ( int )proc.PRIORITY )
+                    {
+                        set_color( true );
+                    }
+                    else
+                    {
+                        set_color( false );
+                    }
                 }
                 else
                 {
@@ -335,31 +376,37 @@ namespace WpUI
                     temp = fcfs.working();
                     sjf.working(); srt.working();hrn.working();
                     prio.working(); rrb.working();
+                    //calc_time( fcfs.get_wait_time(), fcfs.get_return_time() );
                     break;
                 case ( int )proc.SJF:
                     temp = sjf.working();
                     fcfs.working(); srt.working();
                     hrn.working(); prio.working(); rrb.working();
+                    calc_time( sjf.get_wait_time(), sjf.get_return_time() );
                     break;
                 case ( int )proc.SRT:
                     temp = srt.working();
                     fcfs.working(); sjf.working();
                     hrn.working(); prio.working(); rrb.working();
+                    calc_time( srt.get_wait_time(), srt.get_return_time() );
                     break;
                 case ( int )proc.HRN:
                     temp = hrn.working();
                     fcfs.working(); sjf.working(); srt.working();
                     prio.working(); rrb.working();
+                    calc_time( hrn.get_wait_time(), hrn.get_return_time() );
                     break;
                 case ( int )proc.PRIORITY:
                     temp = prio.working();
                     fcfs.working(); sjf.working(); srt.working();
                     hrn.working(); rrb.working();
+                    calc_time( prio.get_wait_time(), prio.get_return_time() );
                     break;
                 case ( int )proc.ROUNDROBIN:
                     temp = rrb.working();
                     fcfs.working(); sjf.working(); srt.working();
                     hrn.working(); prio.working();
+                    calc_time( rrb.get_wait_time(), rrb.get_return_time() );
                     break;
                 default:
                     MessageBox.Show( "올바르지 않은 접근입니다.\n확인 후 다시 작업을 요청하십시오.", "오류", MessageBoxButton.OK, MessageBoxImage.Error );
@@ -383,6 +430,18 @@ namespace WpUI
             ProcessUpdate( temp );
             WaitUpdate();
             ReturnUpdate();
+        }
+
+        private void calc_time(List<int> wait, List<int> ret)
+        {
+            for ( int i = 0; i < data.Count; i++ )
+            {
+                data[ i ].wait_time = "" + wait[ i ];
+                data[ i ].return_time = "" + ret[ i ];
+            }
+
+            tableProcess.ItemsSource = data;
+            tableProcess.Items.Refresh();
         }
 
         private List<ProcessData> get_data()
@@ -438,74 +497,63 @@ namespace WpUI
         }
 
         #region Change Table Color
-        /* Change Color */
+        /* Change Color, Change to Column hide and show */
         private void set_color( bool flag )
         {
             if ( !flag )
             {
-                for ( int i = 0; i < tableProcess.Items.Count; i++ )
-                {
-                    DataGridCell cell = GetCell( i, 2, tableProcess );
-                    cell.Background =  new SolidColorBrush( Color.FromRgb( 140, 140, 140 ) );
-                }
+                tableProcess.Columns[ 2 ].Visibility = Visibility.Hidden;
+                //for ( int i = 0; i < tableProcess.Items.Count; i++ )
+                //{
+                //    DataGridCell cell = GetCell( i, 2, tableProcess );
+                //    cell.Background =  new SolidColorBrush( Color.FromRgb( 140, 140, 140 ) );
+                //}
             }
             else
             {
-                for ( int i = 0; i < tableProcess.Items.Count; i++ )
-                {
-                    DataGridCell cell = GetCell( i, 2, tableProcess );
-                    cell.Background = new SolidColorBrush( Color.FromRgb( 255, 255, 255 ) );
-                }
+                tableProcess.Columns[ 2 ].Visibility = Visibility.Visible;
+                //for ( int i = 0; i < tableProcess.Items.Count; i++ )
+                //{
+                //    DataGridCell cell = GetCell( i, 2, tableProcess );
+                //    cell.Background = new SolidColorBrush( Color.FromRgb( 255, 255, 255 ) );
+                //}
             }
         }
 
-        public DataGridCell GetCell( int rowIndex, int columnIndex, DataGrid dg )
-        {
-            DataGridRow row = dg.ItemContainerGenerator.ContainerFromIndex( rowIndex ) as DataGridRow;
-            if ( row == null )
-            {
-                dg.UpdateLayout();
-                dg.ScrollIntoView( dg.Items[ rowIndex ] );
-                row = ( DataGridRow )dg.ItemContainerGenerator.ContainerFromIndex( rowIndex ) as DataGridRow;
-            }
-            DataGridCellsPresenter p = GetVisualChild<DataGridCellsPresenter>( row );
-            DataGridCell cell = p.ItemContainerGenerator.ContainerFromIndex( columnIndex ) as DataGridCell;
-            return cell;
-        }
+        //public DataGridCell GetCell( int rowIndex, int columnIndex, DataGrid dg )
+        //{
+        //    DataGridRow row = dg.ItemContainerGenerator.ContainerFromIndex( rowIndex ) as DataGridRow;
+        //    if ( row == null )
+        //    {
+        //        dg.UpdateLayout();
+        //        dg.ScrollIntoView( dg.Items[ rowIndex ] );
+        //        row = ( DataGridRow )dg.ItemContainerGenerator.ContainerFromIndex( rowIndex ) as DataGridRow;
+        //    }
+        //    DataGridCellsPresenter p = GetVisualChild<DataGridCellsPresenter>( row );
+        //    DataGridCell cell = p.ItemContainerGenerator.ContainerFromIndex( columnIndex ) as DataGridCell;
+        //    return cell;
+        //}
 
-        static T GetVisualChild<T>( Visual parent ) where T : Visual
-        {
-            T child = default( T );
-            int numVisuals = VisualTreeHelper.GetChildrenCount( parent );
-            for ( int i = 0; i < numVisuals; i++ )
-            {
-                Visual v = ( Visual )VisualTreeHelper.GetChild( parent, i );
-                child = v as T;
-                if ( child == null )
-                {
-                    child = GetVisualChild<T>( v );
-                }
-                if ( child != null )
-                {
-                    break;
-                }
-            }
-            return child;
-        }
+        //static T GetVisualChild<T>( Visual parent ) where T : Visual
+        //{
+        //    T child = default( T );
+        //    int numVisuals = VisualTreeHelper.GetChildrenCount( parent );
+        //    for ( int i = 0; i < numVisuals; i++ )
+        //    {
+        //        Visual v = ( Visual )VisualTreeHelper.GetChild( parent, i );
+        //        child = v as T;
+        //        if ( child == null )
+        //        {
+        //            child = GetVisualChild<T>( v );
+        //        }
+        //        if ( child != null )
+        //        {
+        //            break;
+        //        }
+        //    }
+        //    return child;
+        //}
         #endregion
-
-        private void tableProcess_Sorting( object sender, RoutedEvent e )
-        {
-            switch ( select_flag )
-            {
-                case ( int )proc.PRIORITY:
-                    set_color( true );
-                    break;
-                default:
-                    set_color( false );
-                    break;
-            }
-        }
     }
 
     /* Deep Copy를 위해 반드시 필요 */

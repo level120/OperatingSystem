@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WpUI;
 
 namespace AlgorithmTest
 {
@@ -29,8 +30,6 @@ namespace AlgorithmTest
         {
             if ( estimate_data.Count == 0 )
             {
-                int working_ps_no = -1;
-
                 List<ProcessData> ready_queue = new List<ProcessData>();
 
                 int limit = data.Sum( item => Convert.ToInt32( item.arrived_time ) ) + data.Sum( item => Convert.ToInt32( item.service_time ) );
@@ -60,16 +59,21 @@ namespace AlgorithmTest
                             "" + Common.JOB
                         } ) );
 
-                        // 대기시간 계산
-                        if ( working_ps_no != Convert.ToInt32( ready_queue[ 0 ].no ) )
-                            delay_data[ Convert.ToInt32( ready_queue[ 0 ].pid ) - Common.START_PID ] = ( time - Convert.ToInt32( data[ Convert.ToInt32( ready_queue[ 0 ].no ) - 1 ].arrived_time ) - return_data[ Convert.ToInt32( ready_queue[ 0 ].no ) - 1 ] );
-                        // 반환시간 계산
-                        return_data[ Convert.ToInt32( ready_queue[ 0 ].pid ) - Common.START_PID ] += Common.JOB;
-
                         ready_queue[ 0 ].service_time = "" + ( Convert.ToInt32( ready_queue[ 0 ].service_time ) - Common.JOB );
-
-                        // 대기 시간 구하기 위한 flag
-                        working_ps_no = Convert.ToInt32( ready_queue[ 0 ].no );
+                        
+                        /* 프로세스 시간 */
+                        for ( int idx = 0; idx < ready_queue.Count; idx++ )
+                        {
+                            if ( ready_queue[ idx ].pid == estimate_data[ estimate_data.Count - 1 ].pid )
+                            {
+                                return_data[ Convert.ToInt32( ready_queue[ idx ].pid ) - Common.START_PID ]++;
+                            }
+                            else
+                            {
+                                delay_data[ Convert.ToInt32( ready_queue[ idx ].pid ) - Common.START_PID ]++;
+                                return_data[ Convert.ToInt32( ready_queue[ idx ].pid ) - Common.START_PID ]++;
+                            }
+                        }
 
                         if ( Convert.ToInt32( ready_queue[ 0 ].service_time ) < 1 )
                             ready_queue.RemoveAt( 0 );
@@ -80,6 +84,16 @@ namespace AlgorithmTest
             return estimate_data;
 
             //foreach (var i in estimate_data)    Console.WriteLine(i.no + "\t" + i.pid + "\t" + i.priority + "\t" + i.arrived_time + "\t" + i.service_time);
+        }
+
+        public List<int> get_wait_time()
+        {
+            return delay_data;
+        }
+
+        public List<int> get_return_time()
+        {
+            return return_data;
         }
 
         public double avg_wait()

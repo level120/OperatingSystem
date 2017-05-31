@@ -23,6 +23,12 @@ namespace AlgorithmTest
         /* 도착 시간 정렬 */
         private static int Follow_Initialize( ProcessData A, ProcessData B )
         {
+            if ( Convert.ToInt32( A.arrived_time ) == Convert.ToInt32( B.arrived_time ) )
+            {
+                if ( Convert.ToInt32( A.pid ) < Convert.ToInt32( B.pid ) )
+                    return -1;
+                return 1;
+            }
             if ( Convert.ToInt32( A.arrived_time ) < Convert.ToInt32( B.arrived_time ) )
                 return -1;
             return 1;

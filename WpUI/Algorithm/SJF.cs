@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WpUI;
 
 namespace AlgorithmTest
 {
@@ -62,12 +63,9 @@ namespace AlgorithmTest
                             "" + time,
                             ready_queue[0].service_time
                         } ) );
-
-                        // 대기시간 계산
-                        delay_data[ Convert.ToInt32( ready_queue[ 0 ].pid ) - Common.START_PID ] = ( time - Convert.ToInt32( data[ Convert.ToInt32( ready_queue[ 0 ].no ) - 1 ].arrived_time ) - return_data[ Convert.ToInt32( ready_queue[ 0 ].no ) - 1 ] );
-                        // 반환시간 계산
-                        time += return_data[ Convert.ToInt32( ready_queue[ 0 ].pid ) - Common.START_PID ] = Convert.ToInt32( ready_queue[ 0 ].service_time );
-
+                        
+                        time += Convert.ToInt32( ready_queue[ 0 ].service_time );
+                        
                         ready_queue.RemoveAt( 0 );
                     }
                     else
@@ -75,11 +73,32 @@ namespace AlgorithmTest
                         time++;
                     }
                 }
+
+                List<ProcessData> time_data = GenericCopier<List<ProcessData>>.DeepCopy( estimate_data );
+                time_data = Common.Sort_Default( time_data );
+                data = Common.Sort_Default( data );
+
+                for ( int idx = 0; idx < time_data.Count; idx++ )
+                {
+                    delay_data[ idx ] = Convert.ToInt32( time_data[ idx ].arrived_time ) - Convert.ToInt32( data[ idx ].arrived_time );
+                    return_data[ idx ] = delay_data[ idx ] + Convert.ToInt32( time_data[ idx ].service_time );
+                }
+
             }
 
             return estimate_data;
 
             //foreach (var i in estimate_data)    Console.WriteLine(i.no + "\t" + i.pid + "\t" + i.priority + "\t" + i.arrived_time + "\t" + i.service_time);
+        }
+
+        public List<int> get_wait_time()
+        {
+            return delay_data;
+        }
+
+        public List<int> get_return_time()
+        {
+            return return_data;
         }
 
         public double avg_wait()
