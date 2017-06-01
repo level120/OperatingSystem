@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+//반환시간 = 대기시간 + 서비스시간
 namespace AlgorithmTest
 {
     class FCFS
@@ -35,8 +35,9 @@ namespace AlgorithmTest
 
         public List<ProcessData> working()
         {
+            init();
             //Common.Sort_SRT(data)
-            Common.Sort_Initialize( data );
+            data = Common.Sort_Initialize( data );
 
             //process_service_time에 data.servicetime을 넣음
             for ( int i = 0; i < data.Count; i++ )
@@ -53,6 +54,8 @@ namespace AlgorithmTest
             }
 
             //sum_of_waitingtime
+            //대기시간을 구하기위한 리스트
+            //서비스 타임을 더한것
             for ( int i = 0; i < data.Count; i++ )
             {
                 if ( i != 0 )
@@ -65,25 +68,48 @@ namespace AlgorithmTest
                 }
             }
 
-            //process_waiting_time
+            ////process_waiting_time
             for ( int i = 0; i < data.Count; i++ )
             {
                 if ( i != 0 )
                 {
-                    if ( sum_of_waitingtime[ i - 1 ] - process_arrived_time[ i ] < 0 )
+                    if ( ( sum_of_waitingtime[ i - 1 ] - process_arrived_time[ i ] + process_arrived_time[ 0 ] ) <= 0 )
                     {
-                        process_waiting_time.Add( 0 );
+                        process_waiting_time[Convert.ToInt32(data[i].pid)-Common.START_PID] = 0;
                     }
                     else
                     {
-                        process_waiting_time.Add( sum_of_waitingtime[ i - 1 ] - process_arrived_time[ i ] );
+                        process_waiting_time[ Convert.ToInt32( data[ i ].pid ) - Common.START_PID ] = sum_of_waitingtime[ i - 1 ] - process_arrived_time[ i ] + process_arrived_time[ 0 ];
                     }
                 }
                 else
                 {
-                    process_waiting_time.Add( process_arrived_time[ i ] );
+                    process_waiting_time[ Convert.ToInt32( data[ i ].pid ) - Common.START_PID ] = 0;
                 }
             }
+            //for (int i = 0; i < data.Count; i++)
+            //{
+            //    if (i != 0)
+            //    {
+            //        if (process_arrived_time[i] >= start_time[i])
+            //        {
+            //            process_waiting_time.Add(0);
+            //        }
+            //        else
+            //        {
+            //            process_waiting_time.Add(start_time[i] - process_arrived_time[i]);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        process_waiting_time.Add(i);
+            //    }
+            //}
+
+
+
+
+
             //start_time
             for ( int i = 0; i < data.Count; i++ )
             {
@@ -110,35 +136,96 @@ namespace AlgorithmTest
             {
                 estimate_data.Add( new ProcessData( new string[] { "" + data[ i ].no, "" + data[ i ].pid, "" + data[ i ].priority, "" + start_time[ i ], "" + data[ i ].service_time } ) );
             }
+
+
+            //for ( int i = 0; i < data.Count; i++ )
+            //{
+            //    Console.WriteLine( "sum_of_waitingtime : " + sum_of_waitingtime[ i ] );
+            //}
+            //Console.WriteLine();
+            //for ( int i = 0; i < data.Count; i++ )
+            //{
+            //    Console.WriteLine( "process_waiting_time : " + process_waiting_time[ i ] );
+            //}
+            //Console.WriteLine();
+            //for ( int i = 0; i < data.Count; i++ )
+            //{
+            //    Console.WriteLine( "process_arrived_time : " + process_arrived_time[ i ] );
+            //}
+
+
+            //Console.WriteLine(process_waiting_timeSum());
+            //Console.WriteLine(process_waiting_time_.Sum());
+            //for (int i = 0; i < data.Count; i++)
+            //{
+            //    Console.WriteLine("시작"+start_time[i]);
+            //}
+
+            //for (int i = 0; i < data.Count; i++)
+            //{
+            //    Console.WriteLine("waiting"+process_waiting_time[i]);
+            //}
+
+            data = Common.Sort_Default( data );
+
+            for ( int i = 0; i < process_waiting_time.Count; i++ )
+            {
+                return_time[ Convert.ToInt32( data[ i ].pid ) - Common.START_PID ] = process_waiting_time[ i ] + Convert.ToInt32( data[ i ].service_time );
+            }
+            returng_time_sum = return_time.Sum();
+
             return estimate_data;
         }
 
+        public List<int> get_wait_time()
+        {
+            return process_waiting_time;
+        }
+
+        public List<int> get_return_time()
+        {
+            return return_time;
+        }
+
+        private void init()
+        {
+            for ( int i = 0; i < data.Count; i++ )
+            {
+                process_waiting_time.Add( 0 );
+                return_time.Add( 0 );
+            }
+        }
 
         public double avg_wait()
         {
+            //for(int i = 0; i < data.Count; i++)
+            //{
+            //    waiting_time_sum[]
+            //}
             waiting_time_sum = process_waiting_time.Sum();
             return ( waiting_time_sum ) / ( data.Count );
+            //return 0;
         }
 
         public double avg_return()//어라이브 타임,서비스 타임
         {
-            for ( int i = 0; i < data.Count; i++ )
-            {
-                if ( i == 0 )
-                {
-                    return_time.Add( process_service_time[ i ] );
-                }
-                else if ( sum_of_waitingtime[ i ] - process_arrived_time[ i ] < 1 )
-                {
-                    return_time.Add( 1 );
-                }
-                else
-                {
-                    return_time.Add( sum_of_waitingtime[ i ] - process_arrived_time[ i ] );
-                }
+            //for (int i = 0; i < data.Count; i++)
+            //{
+            //    if (i == 0)
+            //    {
+            //        return_time.Add(process_service_time[i]);
+            //    }
+            //    else if ((sum_of_waitingtime[i] - process_arrived_time[i]) < 1)
+            //    {
+            //        return_time.Add(1);
+            //    }
+            //    else
+            //    {
+            //        return_time.Add(sum_of_waitingtime[i] - process_arrived_time[i]);
+            //    }
 
-            }
-            returng_time_sum = return_time.Sum();
+            //}
+            
 
             return ( returng_time_sum ) / ( data.Count );
         }

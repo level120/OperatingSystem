@@ -138,11 +138,11 @@ namespace AlgorithmTest
 
         public double avg_return()
         {
-            for ( int i = 0; i < return_data.Count; i++ )
-            {
-                return_data[ i ] += delay_data[ i ];
-                //Console.Write( return_data[ i ] + "\t" );
-            }
+            //for ( int i = 0; i < return_data.Count; i++ )
+            //{
+            //    return_data[ i ] += delay_data[ i ];
+            //    Console.Write( return_data[ i ] + "\t" );
+            //}
             //Console.WriteLine( "\n" );
 
             return return_data.Sum() / ( double )return_data.Count;

@@ -1,6 +1,7 @@
 ﻿using AlgorithmTest;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -116,7 +117,7 @@ namespace WpUI
         {
             select_flag = ( int )proc.HRN;
             tbTitle.Content = "H R N";
-            tbDescription.Content = @":  설명이 필요합니다.";
+            tbDescription.Content = @":  높은 응답률을 가진 프로세스를 우선 처리합니다.";
             lfMenu.lbTimequantum.Visibility = Visibility.Hidden;
             lfMenu.sliderTimequantum.Visibility = Visibility.Hidden;
             tableProcess.UnselectAll();
@@ -376,7 +377,7 @@ namespace WpUI
                     temp = fcfs.working();
                     sjf.working(); srt.working();hrn.working();
                     prio.working(); rrb.working();
-                    //calc_time( fcfs.get_wait_time(), fcfs.get_return_time() );
+                    calc_time( fcfs.get_wait_time(), fcfs.get_return_time() );
                     break;
                 case ( int )proc.SJF:
                     temp = sjf.working();
@@ -554,6 +555,29 @@ namespace WpUI
         //    return child;
         //}
         #endregion
+
+        /* if when static mode, table select mode defined */
+        private void tableProcess_PreviewKeyUp( object sender, KeyEventArgs e )
+        {
+            bool checking = true;
+
+            foreach ( ProcessData r in tableProcess.ItemsSource )
+            {
+                if ( r.arrived_time == "" || r.service_time == "" )
+                {
+                    checking = false;
+                }
+            }
+
+            if ( checking )
+            {
+                tableProcess.SelectionUnit = DataGridSelectionUnit.FullRow;
+            }
+            else
+            {
+                tableProcess.SelectionUnit = DataGridSelectionUnit.Cell;
+            }
+        }
     }
 
     /* Deep Copy를 위해 반드시 필요 */
