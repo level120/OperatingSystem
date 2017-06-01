@@ -8,6 +8,10 @@
         mc:Ignorable="d"
         Icon="App.ico"
         Title="CPU Scheduling Simulation" Height="600" Width="1028" ResizeMode="NoResize">
+    <!-- F1 Key Binding -->
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Help" Executed="Window_Help_Executed"/>
+    </Window.CommandBindings>
     <Window.Resources>
         <Style x:Key="CenterCellStyle" TargetType="{x:Type DataGridCell}" >
             <Setter Property="Template">

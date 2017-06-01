@@ -579,6 +579,13 @@ namespace WpUI
                 tableProcess.SelectionUnit = DataGridSelectionUnit.Cell;
             }
         }
+
+
+        /* F1 key enable */
+        private void Window_Help_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            System.Windows.Forms.Help.ShowHelp( null, @"help.chm" );
+        }
     }
 
     /* Deep Copy를 위해 반드시 필요 */
