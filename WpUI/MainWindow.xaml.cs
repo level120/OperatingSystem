@@ -369,7 +369,7 @@ namespace WpUI
             prio    = new Priority( data_prio );
             rrb     = new RoundRobin( data_rrb, time_quantum );
 
-            List<ProcessData> temp = new List<ProcessData>();
+            List<ProcessData> temp;
 
             switch ( select_flag )
             {
@@ -411,6 +411,7 @@ namespace WpUI
                     break;
                 default:
                     MessageBox.Show( "올바르지 않은 접근입니다.\n확인 후 다시 작업을 요청하십시오.", "오류", MessageBoxButton.OK, MessageBoxImage.Error );
+                    temp = new List<ProcessData>();
                     return;
             }
 
