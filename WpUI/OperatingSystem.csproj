@@ -54,6 +54,9 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="Technewlogic.WpfDialogManagement">
+      <HintPath>.\Technewlogic.WpfDialogManagement.dll</HintPath>
+    </Reference>
     <Reference Include="ToggleSwitch, Version=1.1.2.0, Culture=neutral, PublicKeyToken=8637099990568f75, processorArchitecture=MSIL">
       <HintPath>..\packages\ToggleSwitch.1.1.2\lib\net40-client\ToggleSwitch.dll</HintPath>
     </Reference>
@@ -75,6 +78,9 @@
     <Compile Include="Algorithm\RoundRobin.cs" />
     <Compile Include="Algorithm\SJF.cs" />
     <Compile Include="Algorithm\SRT.cs" />
+    <Compile Include="ModalDialog.xaml.cs">
+      <DependentUpon>ModalDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TopStatus.xaml.cs">
       <DependentUpon>TopStatus.xaml</DependentUpon>
     </Compile>
@@ -97,6 +103,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ModalDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="TopStatus.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

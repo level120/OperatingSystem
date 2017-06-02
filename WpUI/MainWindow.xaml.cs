@@ -18,6 +18,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Technewlogic.WpfDialogManagement;
 
 namespace WpUI
 {
@@ -28,6 +29,7 @@ namespace WpUI
     {
         private enum proc { FCFS = 1, SJF, SRT, HRN, PRIORITY, ROUNDROBIN };
         private int select_flag = -1;   // 1:fcfs, 2:sjf, 3:srt, 4:hrn, 5:priority, 6:round_robin, 0:No page
+        private bool firstRun = true;
 
         private FCFS        fcfs;
         private SJF         sjf;
@@ -73,6 +75,7 @@ namespace WpUI
 
             Init_Events();
             Init_Method();
+            Init_FirstRun();
         }
 
         #region working delegate
@@ -211,6 +214,35 @@ namespace WpUI
             chartProcess.Titles.Add( "스케쥴링 결과" );
             chartWait.Titles.Add( "평균대기시간" );
             chartReturn.Titles.Add( "평균반환시간" );
+        }
+
+        /* Seeting File IO */
+        public void Init_FirstRun()
+        {
+            try
+            {
+                using ( StreamReader sr = new StreamReader( "config.dat" ) )
+                {
+                    firstRun = sr.ReadLine() == "1" ? false : true;
+                    sr.Close();
+                }
+
+                using ( StreamWriter sw = new StreamWriter( "config.dat" ) )
+                {
+                    sw.WriteLine( "1" );
+                    sw.Close();
+                }
+            }
+            catch
+            {
+                using ( StreamWriter sw = new StreamWriter( "config.dat" ) )
+                {
+                    sw.WriteLine( "1" );
+                    sw.Close();
+                }
+
+                firstRun = true;
+            };
         }
 
         #region Drawing Chart Area
@@ -585,6 +617,18 @@ namespace WpUI
         private void Window_Help_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             System.Windows.Forms.Help.ShowHelp( null, @"help.chm" );
+        }
+
+
+        /* Modal Dialog */
+        private void Window_Loaded( object sender, RoutedEventArgs e )
+        {
+            if ( firstRun )
+            {
+                var dialogManager = new DialogManager( this, Dispatcher );
+                dialogManager
+                    .CreateCustomContentDialog( new ModalDialog(), "Getting Start!", DialogMode.Ok ).Show();
+            }
         }
     }
 
