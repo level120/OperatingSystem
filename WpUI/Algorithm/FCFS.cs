@@ -56,37 +56,37 @@ namespace AlgorithmTest
             //sum_of_waitingtime
             //대기시간을 구하기위한 리스트
             //서비스 타임을 더한것
-            for ( int i = 0; i < data.Count; i++ )
-            {
-                if ( i != 0 )
-                {
-                    sum_of_waitingtime.Add( process_service_time[ i ] + sum_of_waitingtime[ i - 1 ] );
-                }
-                else
-                {
-                    sum_of_waitingtime.Add( process_service_time[ i ] );
-                }
-            }
+            //for ( int i = 0; i < data.Count; i++ )
+            //{
+            //    if ( i != 0 )
+            //    {
+            //        sum_of_waitingtime.Add( process_service_time[ i ] + sum_of_waitingtime[ i - 1 ] );
+            //    }
+            //    else
+            //    {
+            //        sum_of_waitingtime.Add( process_service_time[ i ] );
+            //    }
+            //}
 
-            ////process_waiting_time
-            for ( int i = 0; i < data.Count; i++ )
-            {
-                if ( i != 0 )
-                {
-                    if ( ( sum_of_waitingtime[ i - 1 ] - process_arrived_time[ i ] + process_arrived_time[ 0 ] ) <= 0 )
-                    {
-                        process_waiting_time[Convert.ToInt32(data[i].pid)-Common.START_PID] = 0;
-                    }
-                    else
-                    {
-                        process_waiting_time[ Convert.ToInt32( data[ i ].pid ) - Common.START_PID ] = sum_of_waitingtime[ i - 1 ] - process_arrived_time[ i ] + process_arrived_time[ 0 ];
-                    }
-                }
-                else
-                {
-                    process_waiting_time[ Convert.ToInt32( data[ i ].pid ) - Common.START_PID ] = 0;
-                }
-            }
+            //////process_waiting_time
+            //for ( int i = 0; i < data.Count; i++ )
+            //{
+            //    if ( i != 0 )
+            //    {
+            //        if ( ( sum_of_waitingtime[ i ] - process_arrived_time[ i ] ) <= 0 )
+            //        {
+            //            process_waiting_time[ Convert.ToInt32( data[ i ].pid ) - Common.START_PID ] = 0;
+            //        }
+            //        else
+            //        {
+            //            process_waiting_time[ Convert.ToInt32( data[ i ].pid ) - Common.START_PID ] = sum_of_waitingtime[ i ] - process_arrived_time[ i ];
+            //        }
+            //    }
+            //    else
+            //    {
+            //        process_waiting_time[ Convert.ToInt32( data[ i ].pid ) - Common.START_PID ] = 0;
+            //    }
+            //}
             //for (int i = 0; i < data.Count; i++)
             //{
             //    if (i != 0)
@@ -131,6 +131,19 @@ namespace AlgorithmTest
             }
 
 
+            /* 추가한 구역 wait time */
+            #region
+
+            for ( int i = 0; i < data.Count; i++ )
+            {
+                process_waiting_time[ Convert.ToInt32( data[ i ].pid ) - Common.START_PID ]
+                    = start_time[ i ] - process_arrived_time[ i ];
+            }
+
+            #endregion
+            /* 구역 끝 */
+
+
             //estimate_data
             for ( int i = 0; i < data.Count; i++ )
             {
@@ -166,11 +179,12 @@ namespace AlgorithmTest
             //    Console.WriteLine("waiting"+process_waiting_time[i]);
             //}
 
-            data = Common.Sort_Default( data );
+            //data = Common.Sort_Default( data );
 
             for ( int i = 0; i < process_waiting_time.Count; i++ )
             {
-                return_time[ Convert.ToInt32( data[ i ].pid ) - Common.START_PID ] = process_waiting_time[ i ] + Convert.ToInt32( data[ i ].service_time );
+                return_time[ Convert.ToInt32( data[ i ].pid ) - Common.START_PID ]
+                    = process_waiting_time[ Convert.ToInt32( data[ i ].pid ) - Common.START_PID ] + Convert.ToInt32( data[ i ].service_time );
             }
             returng_time_sum = return_time.Sum();
 

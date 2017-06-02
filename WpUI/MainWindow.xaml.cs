@@ -260,8 +260,10 @@ namespace WpUI
             {
                 seriesGantt.Points.AddXY( Convert.ToInt32( chart[ i ].pid ), Convert.ToInt32( chart[ i ].arrived_time ), ( Convert.ToInt32( chart[ i ].arrived_time ) + Convert.ToInt32( chart[ i ].service_time ) ) );
             }
-
+                        
             chartProcess.Series.Add( seriesGantt );
+            chartProcess.Series[ 0 ].Name = "Process";
+            chartProcess.ChartAreas[ 0 ].RecalculateAxesScale();
             chartProcess.Update();
         }
 

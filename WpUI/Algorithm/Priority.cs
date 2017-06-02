@@ -29,8 +29,6 @@ namespace AlgorithmTest
         {
             if ( estimate_data.Count == 0 )
             {
-                int working_ps_no = -1;
-
                 List<ProcessData> ready_queue = new List<ProcessData>();
 
                 int limit = data.Sum( item => Convert.ToInt32( item.arrived_time ) ) + data.Sum( item => Convert.ToInt32( item.service_time ) );
