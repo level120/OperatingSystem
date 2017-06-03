@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WpUI;
 
 namespace AlgorithmTest
@@ -82,8 +80,6 @@ namespace AlgorithmTest
             }
 
             return estimate_data;
-
-            //foreach (var i in estimate_data)    Console.WriteLine(i.no + "\t" + i.pid + "\t" + i.priority + "\t" + i.arrived_time + "\t" + i.service_time);
         }
 
         public List<int> get_wait_time()
@@ -98,22 +94,11 @@ namespace AlgorithmTest
 
         public double avg_wait()
         {
-            //foreach ( var i in delay_data )
-            //    Console.Write( i + "\t" );
-            //Console.WriteLine( "\n" );
-
             return delay_data.Sum() / ( double )delay_data.Count;
         }
 
         public double avg_return()
         {
-            //for ( int i = 0; i < return_data.Count; i++ )
-            //{
-            //    return_data[ i ] += delay_data[ i ];
-            //    Console.Write( return_data[ i ] + "\t" );
-            //}
-            //Console.WriteLine( "\n" );
-
             return return_data.Sum() / ( double )return_data.Count;
         }
 

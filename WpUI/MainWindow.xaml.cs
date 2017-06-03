@@ -1,23 +1,12 @@
 ﻿using AlgorithmTest;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
-using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Technewlogic.WpfDialogManagement;
 
 namespace WpUI
@@ -223,7 +212,9 @@ namespace WpUI
             {
                 using ( StreamReader sr = new StreamReader( "config.dat" ) )
                 {
-                    firstRun = sr.ReadLine() == "1" ? false : true;
+                    string flag = sr.ReadLine();
+                    if ( flag == "1" )  { firstRun = false; }
+                    else                { firstRun = true; }
                     sr.Close();
                 }
 
@@ -242,7 +233,7 @@ namespace WpUI
                 }
 
                 firstRun = true;
-            };
+            }
         }
 
         #region Drawing Chart Area
@@ -334,15 +325,6 @@ namespace WpUI
                 i.wait_time = i.return_time = "-";
             }
             tableProcess.ItemsSource = data;
-            tableProcess.Items.Refresh();
-        }
-
-        private void Reset()
-        {
-            chartProcess.Series.Clear();
-            chartWait.Series.Clear();
-            chartReturn.Series.Clear();
-            tableProcess.ItemsSource = null;
             tableProcess.Items.Refresh();
         }
 
@@ -445,7 +427,6 @@ namespace WpUI
                     break;
                 default:
                     MessageBox.Show( "올바르지 않은 접근입니다.\n확인 후 다시 작업을 요청하십시오.", "오류", MessageBoxButton.OK, MessageBoxImage.Error );
-                    temp = new List<ProcessData>();
                     return;
             }
 
@@ -539,56 +520,12 @@ namespace WpUI
             if ( !flag )
             {
                 tableProcess.Columns[ 2 ].Visibility = Visibility.Hidden;
-                //for ( int i = 0; i < tableProcess.Items.Count; i++ )
-                //{
-                //    DataGridCell cell = GetCell( i, 2, tableProcess );
-                //    cell.Background =  new SolidColorBrush( Color.FromRgb( 140, 140, 140 ) );
-                //}
             }
             else
             {
                 tableProcess.Columns[ 2 ].Visibility = Visibility.Visible;
-                //for ( int i = 0; i < tableProcess.Items.Count; i++ )
-                //{
-                //    DataGridCell cell = GetCell( i, 2, tableProcess );
-                //    cell.Background = new SolidColorBrush( Color.FromRgb( 255, 255, 255 ) );
-                //}
             }
         }
-
-        //public DataGridCell GetCell( int rowIndex, int columnIndex, DataGrid dg )
-        //{
-        //    DataGridRow row = dg.ItemContainerGenerator.ContainerFromIndex( rowIndex ) as DataGridRow;
-        //    if ( row == null )
-        //    {
-        //        dg.UpdateLayout();
-        //        dg.ScrollIntoView( dg.Items[ rowIndex ] );
-        //        row = ( DataGridRow )dg.ItemContainerGenerator.ContainerFromIndex( rowIndex ) as DataGridRow;
-        //    }
-        //    DataGridCellsPresenter p = GetVisualChild<DataGridCellsPresenter>( row );
-        //    DataGridCell cell = p.ItemContainerGenerator.ContainerFromIndex( columnIndex ) as DataGridCell;
-        //    return cell;
-        //}
-
-        //static T GetVisualChild<T>( Visual parent ) where T : Visual
-        //{
-        //    T child = default( T );
-        //    int numVisuals = VisualTreeHelper.GetChildrenCount( parent );
-        //    for ( int i = 0; i < numVisuals; i++ )
-        //    {
-        //        Visual v = ( Visual )VisualTreeHelper.GetChild( parent, i );
-        //        child = v as T;
-        //        if ( child == null )
-        //        {
-        //            child = GetVisualChild<T>( v );
-        //        }
-        //        if ( child != null )
-        //        {
-        //            break;
-        //        }
-        //    }
-        //    return child;
-        //}
         #endregion
 
         /* if when static mode, table select mode defined */
