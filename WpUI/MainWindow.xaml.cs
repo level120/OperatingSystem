@@ -624,7 +624,7 @@ namespace WpUI
             {
                 var dialogManager = new DialogManager( this, Dispatcher );
                 dialogManager
-                    .CreateCustomContentDialog( new ModalDialog(), "Getting Start!", DialogMode.Ok ).Show();
+                    .CreateCustomContentDialog( new ModalDialog(), DialogMode.Ok ).Show();
             }
         }
     }

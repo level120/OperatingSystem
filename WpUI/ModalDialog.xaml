@@ -19,6 +19,7 @@
                     </Grid.RowDefinitions>
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top">
                         <Label Content="간단 사용설명서" Foreground="#FFC1C1C1" HorizontalAlignment="Center" FontSize="18" FontWeight="Bold"/>
+                        <Label Height="15"/>
                         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Orientation="Horizontal">
                             <Label Width="200" Height="280">
                                 <Label.Background>
@@ -30,8 +31,7 @@
                                 <Label Content="먼저 좌측에 보이는 화면에서 알고리즘 기법을 선택합니다.&#xd;&#xd;(알고리즘은 총 6개의 기법을 지원합니다)" Foreground="#FFC1C1C1" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
                                 <Label Height="20"/>
                                 <Label Content="[지원하는 알고리즘]" Foreground="#FFC1C1C1" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
-                                <Label Content="▶ FCFS&#x9;&#x9;&#x9;▶ S R T&#xd;▶ S J F&#x9;&#x9;&#x9;▶ 우선순위&#xd;▶ H R N&#x9;&#x9;▶ 라운드 로빈&#xd;
-                                       " Foreground="#FFC1C1C1" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
+                                <Label Content="▶ FCFS&#x9;&#x9;&#x9;▶ S R T&#xd;▶ S J F&#x9;&#x9;&#x9;▶ 우선순위&#xd;▶ H R N&#x9;&#x9;▶ 라운드 로빈&#xd;" Foreground="#FFC1C1C1" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
                             </StackPanel>
                         </StackPanel>
                         <Label Height="30"/>
