@@ -154,5 +154,14 @@
   <ItemGroup>
     <Resource Include="make_btn.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="help1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="help2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="help3.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -16,7 +16,7 @@
         <Grid HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="403.882" Margin="388.718,0,0,0">
             <StackPanel Orientation="Horizontal" Margin="97.384,0,0,0" >
                 <Label Content="개수" Margin="0,0,0,0" Height="25" FontWeight="Bold" Foreground="Black" />
-                <Slider Name="sliderProcess" Margin="5,0,0,0" Height="25" Minimum="1" Value="5" Width="100" TickPlacement="Both" SmallChange="1" AutoToolTipPlacement="TopLeft" ToolTip="프로세스의 개수를 설정합니다" />
+                <Slider Name="sliderProcess" Margin="5,0,0,0" Height="25" Minimum="1" Value="5" Width="100" TickPlacement="Both" SmallChange="1" AutoToolTipPlacement="TopLeft" ToolTip="프로세스의 개수를 설정합니다" IsSnapToTickEnabled="True" />
                 <ToggleSwitch:HorizontalToggleSwitch x:Name="tgBtn" HorizontalAlignment="Left" Height="20" Margin="5,0,10,0" VerticalAlignment="Stretch" Width="84" IsChecked="True" UncheckedContent="수동" CheckedContent="자동" ToolTip="프로세스 생성 방법을 결정합니다."/>
                 <Button Content="" Margin="0,6,0,6" Width="70" PreviewMouseDown="Button_PreviewMouseDown" BorderBrush="{x:Null}" Style="{DynamicResource ButtonStyle1}" >
                     <Button.Resources>

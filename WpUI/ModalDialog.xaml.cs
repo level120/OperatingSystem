@@ -26,5 +26,10 @@ namespace WpUI
         {
             InitializeComponent();
         }
+
+        private void btnHelp_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.Help.ShowHelp(null, @"help.chm");
+        }
     }
 }

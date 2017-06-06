@@ -17,8 +17,8 @@
                 <ListBoxItem Name="item5" Foreground="White" Padding="15,0,0,0" FontSize="14" FontWeight="Bold" Height="45" PreviewMouseDown="item5_PreviewMouseDown" ToolTip="우선순위(선점) 기법을 선택합니다"># Priority</ListBoxItem>
                 <ListBoxItem Name="item6" Foreground="White" Padding="15,0,0,0" FontSize="14" FontWeight="Bold" Height="45" PreviewMouseDown="item6_PreviewMouseDown" ToolTip="Round-Robin(선점) 기법을 선택합니다"># Round-Robin</ListBoxItem>
             </ListBox>
-            <Label Name="lbTimequantum" HorizontalAlignment="Center" Content="CPU Time" Height="30" FontSize="14" FontWeight="Bold" Foreground="#FF7E8488" Visibility="Hidden" />
-            <Slider Name="sliderTimequantum" Height="25" Minimum="1" Value="1" Width="100" TickPlacement="Both" SmallChange="1" AutoToolTipPlacement="TopLeft" ToolTip="CPU Time을 설정합니다" Maximum="5" Visibility="Hidden" />
+            <Label Name="lbTimequantum" HorizontalAlignment="Center" Content="CPU Time Slice" Height="30" FontSize="14" FontWeight="Bold" Foreground="#FF7E8488" Visibility="Hidden" />
+            <Slider Name="sliderTimequantum" Height="25" Minimum="1" Value="1" Width="100" TickPlacement="Both" SmallChange="1" AutoToolTipPlacement="TopLeft" ToolTip="CPU Time을 설정합니다" Maximum="5" Visibility="Hidden" IsSnapToTickEnabled="True" />
         </StackPanel>
 
     </Grid>

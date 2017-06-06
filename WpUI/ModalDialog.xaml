@@ -8,7 +8,7 @@
         <Border Background="#90000000" Visibility="{Binding Visibility}">
             <Border BorderBrush="Black" BorderThickness="1" Background="#FF292929" 
 					CornerRadius="10,10,10,10" VerticalAlignment="Center"
-					HorizontalAlignment="Center" Height="480" Width="680" Margin="0,0,0,0">
+					HorizontalAlignment="Center" Height="860" Width="680" Margin="0,0,0,0">
                 <Border.BitmapEffect>
                     <DropShadowBitmapEffect Color="Black" Opacity="0.5" Direction="270" ShadowDepth="0.7" />
                 </Border.BitmapEffect>
@@ -17,7 +17,49 @@
                         <RowDefinition />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <TextBlock x:Name="MessageTextBlock" Text="간단한 설명서가 들어갈 곳" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Margin="5" Foreground="#FFC1C1C1" FontSize="24" FontWeight="Bold" />
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top">
+                        <Label Content="간단 사용설명서" Foreground="#FFC1C1C1" HorizontalAlignment="Center" FontSize="18" FontWeight="Bold"/>
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Orientation="Horizontal">
+                            <Label Width="200" Height="280">
+                                <Label.Background>
+                                    <ImageBrush ImageSource="help1.png"/>
+                                </Label.Background>
+                            </Label>
+                            <Label Width="45"/>
+                            <StackPanel VerticalAlignment="Center">
+                                <Label Content="먼저 좌측에 보이는 화면에서 알고리즘 기법을 선택합니다.&#xd;&#xd;(알고리즘은 총 6개의 기법을 지원합니다)" Foreground="#FFC1C1C1" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
+                                <Label Height="20"/>
+                                <Label Content="[지원하는 알고리즘]" Foreground="#FFC1C1C1" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
+                                <Label Content="▶ FCFS&#x9;&#x9;&#x9;▶ S R T&#xd;▶ S J F&#x9;&#x9;&#x9;▶ 우선순위&#xd;▶ H R N&#x9;&#x9;▶ 라운드 로빈&#xd;
+                                       " Foreground="#FFC1C1C1" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <Label Height="30"/>
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Orientation="Horizontal">
+                            <Label Width="200" Height="23">
+                                <Label.Background>
+                                    <ImageBrush ImageSource="help2.png"/>
+                                </Label.Background>
+                            </Label>
+                            <Label />
+                            <Label Content="우측 상단에서는 프로세스의 개수와 생성방법을 나타냅니다.&#xd;프로세스는 1~10개를 지원하며, [CREATE]버튼으로 실행합니다." Foreground="#FFC1C1C1" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <Label Height="30"/>
+                        <Label Width="500" Height="300">
+                            <Label.Background>
+                                <ImageBrush ImageSource="help3.png"/>
+                            </Label.Background>
+                        </Label>
+                        <Label Content="좌측 위부터 각 프로세스에 대한 정보, 스케쥴링 결과," Foreground="#FFC1C1C1" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Label Content="그리고 각 기법에 따른 평균대기/반환시간을 한눈에 확인할 수 있습니다." Foreground="#FFC1C1C1" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Label Height="30" />
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Orientation="Horizontal">
+                            <TextBlock Text="보다 자세한 내용을 보려면 " Foreground="#FFC1C1C1" FontSize="12" FontWeight="Bold" Margin="0,2,0,0" />
+                            <Button x:Name="btnHelp" Content="이곳" Foreground="#FF8085FB" FontSize="12" FontWeight="Bold" Background="{x:Null}" BorderBrush="{x:Null}" VerticalContentAlignment="Center" Click="btnHelp_Click" />
+                            <TextBlock Text="을 참고하세요." Foreground="#FFC1C1C1" FontSize="12" FontWeight="Bold" Margin="0,2,0,0" />
+                        </StackPanel>
+                        <Label Content="(이 프로그램은 F1(도움말 기능키) 기능을 제공합니다)" Foreground="#FFC1C1C1" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </StackPanel>
                     <!--<UniformGrid Grid.Row="1" Margin="5" Columns="2" HorizontalAlignment="Center" VerticalAlignment="Bottom">
                         <CheckBox x:Name="AutoRunFlag" Width="120" VerticalAlignment="Center" Content="다시 보지 않기" Foreground="#FFC1C1C1" Checked="AutoRunFlag_Checked" />
                         <Button x:Name="btnClose" Click="btnClose_Click" Content="닫기" Margin="2" />

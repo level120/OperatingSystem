@@ -2,11 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Windows.Input;
+using System.Windows.Interop;
 using Technewlogic.WpfDialogManagement;
 
 namespace WpUI
@@ -16,6 +18,62 @@ namespace WpUI
     /// </summary>
     public partial class MainWindow : Window
     {
+        #region Window help icon in title bar
+        private const uint WS_EX_CONTEXTHELP = 0x00000400;
+        private const uint WS_MINIMIZEBOX = 0x00020000;
+        private const uint WS_MAXIMIZEBOX = 0x00010000;
+        private const int GWL_STYLE = -16;
+        private const int GWL_EXSTYLE = -20;
+        private const int SWP_NOSIZE = 0x0001;
+        private const int SWP_NOMOVE = 0x0002;
+        private const int SWP_NOZORDER = 0x0004;
+        private const int SWP_FRAMECHANGED = 0x0020;
+        private const int WM_SYSCOMMAND = 0x0112;
+        private const int SC_CONTEXTHELP = 0xF180;
+
+
+        [DllImport( "user32.dll" )]
+        private static extern uint GetWindowLong( IntPtr hwnd, int index );
+
+        [DllImport( "user32.dll" )]
+        private static extern int SetWindowLong( IntPtr hwnd, int index, uint newStyle );
+
+        [DllImport( "user32.dll" )]
+        private static extern bool SetWindowPos( IntPtr hwnd, IntPtr hwndInsertAfter, int x, int y, int width, int height, uint flags );
+
+
+        protected override void OnSourceInitialized( EventArgs e )
+        {
+            base.OnSourceInitialized( e );
+            IntPtr hwnd = new System.Windows.Interop.WindowInteropHelper( this ).Handle;
+            uint styles = GetWindowLong( hwnd, GWL_STYLE );
+            styles &= 0xFFFFFFFF ^ ( WS_MINIMIZEBOX | WS_MAXIMIZEBOX );
+            SetWindowLong( hwnd, GWL_STYLE, styles );
+            styles = GetWindowLong( hwnd, GWL_EXSTYLE );
+            styles |= WS_EX_CONTEXTHELP;
+            SetWindowLong( hwnd, GWL_EXSTYLE, styles );
+            SetWindowPos( hwnd, IntPtr.Zero, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED );
+            ( ( HwndSource )PresentationSource.FromVisual( this ) ).AddHook( HelpHook );
+        }
+
+        private IntPtr HelpHook( IntPtr hwnd,
+                int msg,
+                IntPtr wParam,
+                IntPtr lParam,
+                ref bool handled )
+        {
+            if ( msg == WM_SYSCOMMAND &&
+                    ( ( int )wParam & 0xFFF0 ) == SC_CONTEXTHELP )
+            {
+                var dialogManager = new DialogManager( this, Dispatcher );
+                dialogManager
+                    .CreateCustomContentDialog( new ModalDialog(), DialogMode.Ok ).Show();
+                handled = true;
+            }
+            return IntPtr.Zero;
+        }
+        #endregion
+
         private enum proc { FCFS = 1, SJF, SRT, HRN, PRIORITY, ROUNDROBIN };
         private int select_flag = -1;   // 1:fcfs, 2:sjf, 3:srt, 4:hrn, 5:priority, 6:round_robin, 0:No page
         private bool firstRun = true;
@@ -73,7 +131,7 @@ namespace WpUI
         {
             select_flag = ( int )proc.FCFS;
             tbTitle.Content = "F C F S";
-            tbDescription.Content = @":  먼저 들어온 순서대로 처리합니다.";
+            tbDescription.Content = @":  준비 큐에 들어온 순서대로 처리합니다.";
             lfMenu.lbTimequantum.Visibility = Visibility.Hidden;
             lfMenu.sliderTimequantum.Visibility = Visibility.Hidden;
             tableProcess.UnselectAll();
@@ -85,7 +143,7 @@ namespace WpUI
         {
             select_flag = ( int )proc.SJF;
             tbTitle.Content = "S J F";
-            tbDescription.Content = @":  서비스 시간이 가장 짧은 순서대로 처리합니다.";
+            tbDescription.Content = @":  서비스 시간이 가장 짧은 프로세스를 우선적으로 처리합니다.";
             lfMenu.lbTimequantum.Visibility = Visibility.Hidden;
             lfMenu.sliderTimequantum.Visibility = Visibility.Hidden;
             tableProcess.UnselectAll();
@@ -97,7 +155,7 @@ namespace WpUI
         {
             select_flag = ( int )proc.SRT;
             tbTitle.Content = "S R T";
-            tbDescription.Content = @":  SJF의 선점형 구조로서 매번 누가 짧은지 확인하여 처리합니다.";
+            tbDescription.Content = @":  잔여 서비스 시간이 가장 짧은 프로세스를 우선적으로 처리합니다.";
             lfMenu.lbTimequantum.Visibility = Visibility.Hidden;
             lfMenu.sliderTimequantum.Visibility = Visibility.Hidden;
             tableProcess.UnselectAll();
@@ -109,7 +167,7 @@ namespace WpUI
         {
             select_flag = ( int )proc.HRN;
             tbTitle.Content = "H R N";
-            tbDescription.Content = @":  높은 응답률을 가진 프로세스를 우선 처리합니다.";
+            tbDescription.Content = @":  스케쥴링 시점에서 높은 응답률을 가진 프로세스를 우선 처리합니다.";
             lfMenu.lbTimequantum.Visibility = Visibility.Hidden;
             lfMenu.sliderTimequantum.Visibility = Visibility.Hidden;
             tableProcess.UnselectAll();
@@ -121,7 +179,7 @@ namespace WpUI
         {
             select_flag = ( int )proc.PRIORITY;
             tbTitle.Content = "Priority";
-            tbDescription.Content = @":  선점형이며 우선순위가 높은 순서대로 처리합니다.";
+            tbDescription.Content = @":  프로세스의 우선순위가 높은 순서대로 처리합니다.";
             lfMenu.lbTimequantum.Visibility = Visibility.Hidden;
             lfMenu.sliderTimequantum.Visibility = Visibility.Hidden;
             tableProcess.UnselectAll();
@@ -133,7 +191,7 @@ namespace WpUI
         {
             select_flag = ( int )proc.ROUNDROBIN;
             tbTitle.Content = "Round-Robin";
-            tbDescription.Content = @":  Time Quantum 단위로 처리합니다.";
+            tbDescription.Content = @":  FCFS 기법으로 처리하되, CPU Time 단위로 처리합니다.";
             lfMenu.lbTimequantum.Visibility = Visibility.Visible;
             lfMenu.sliderTimequantum.Visibility = Visibility.Visible;
             tableProcess.UnselectAll();
