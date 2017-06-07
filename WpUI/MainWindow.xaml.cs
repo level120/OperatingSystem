@@ -205,20 +205,26 @@ namespace WpUI
             /* Set Critical Section */
             lock ( thislock )
             {
-                tableProcess.IsReadOnly = true;
-                btnRun.Visibility = Visibility.Visible;
-                CreateTables();
-                tableProcess.UnselectAll();
-                tableProcess.SelectionUnit = DataGridSelectionUnit.FullRow;
-                ChangeTables();
+                try
+                {
+                    tableProcess.IsReadOnly = true;
+                    btnRun.Visibility = Visibility.Visible;
+                    CreateTables();
+                    tableProcess.UnselectAll();
+                    tableProcess.SelectionUnit = DataGridSelectionUnit.FullRow;
+                    ChangeTables();
 
-                if ( select_flag == ( int )proc.PRIORITY )
+                    if ( select_flag == ( int )proc.PRIORITY )
+                    {
+                        set_color( true );
+                    }
+                    else
+                    {
+                        set_color( false );
+                    }
+                } catch
                 {
-                    set_color( true );
-                }
-                else
-                {
-                    set_color( false );
+                    MessageBox.Show( "테이블이 아직 편집상태 입니다.\n확인 후 다시 작업을 요청하십시오.", "오류", MessageBoxButton.OK, MessageBoxImage.Error );
                 }
             }
         }
@@ -228,21 +234,27 @@ namespace WpUI
             /* Set Critical Section */
             lock ( thislock )
             {
-                tableProcess.IsReadOnly = false;
-                PTHeader1.IsReadOnly = PTHeader2.IsReadOnly = true;
-                btnRun.Visibility = Visibility.Visible;
-                CreateTables();
-                tableProcess.UnselectAll();
-                tableProcess.SelectionUnit = DataGridSelectionUnit.Cell;
-                ChangeTables();
+                try
+                {
+                    tableProcess.IsReadOnly = false;
+                    PTHeader1.IsReadOnly = PTHeader2.IsReadOnly = true;
+                    btnRun.Visibility = Visibility.Visible;
+                    CreateTables();
+                    tableProcess.UnselectAll();
+                    tableProcess.SelectionUnit = DataGridSelectionUnit.Cell;
+                    ChangeTables();
 
-                if ( select_flag == ( int )proc.PRIORITY )
+                    if ( select_flag == ( int )proc.PRIORITY )
+                    {
+                        set_color( true );
+                    }
+                    else
+                    {
+                        set_color( false );
+                    }
+                } catch
                 {
-                    set_color( true );
-                }
-                else
-                {
-                    set_color( false );
+                    MessageBox.Show( "테이블이 아직 편집상태 입니다.\n확인 후 다시 작업을 요청하십시오.", "오류", MessageBoxButton.OK, MessageBoxImage.Error );
                 }
             }
         }
