@@ -179,7 +179,7 @@ namespace WpUI
         {
             select_flag = ( int )proc.PRIORITY;
             tbTitle.Content = "Priority";
-            tbDescription.Content = @":  프로세스의 우선순위가 높은 순서대로 처리합니다.";
+            tbDescription.Content = @":  프로세스의 우선순위가 높은 순서(9:Highest Priority)대로 처리합니다.";
             lfMenu.lbTimequantum.Visibility = Visibility.Hidden;
             lfMenu.sliderTimequantum.Visibility = Visibility.Hidden;
             tableProcess.UnselectAll();
