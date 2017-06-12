@@ -136,7 +136,6 @@ namespace WpUI
             lfMenu.sliderTimequantum.Visibility = Visibility.Hidden;
             tableProcess.UnselectAll();
             set_color( false );
-            ChangeTables();
         }
         /* SJF */
         private void Item2_Clicked()
@@ -148,7 +147,6 @@ namespace WpUI
             lfMenu.sliderTimequantum.Visibility = Visibility.Hidden;
             tableProcess.UnselectAll();
             set_color( false );
-            ChangeTables();
         }
         /* SRT */
         private void Item3_Clicked()
@@ -160,7 +158,6 @@ namespace WpUI
             lfMenu.sliderTimequantum.Visibility = Visibility.Hidden;
             tableProcess.UnselectAll();
             set_color( false );
-            ChangeTables();
         }
         /* HRN */
         private void Item4_Clicked()
@@ -172,7 +169,6 @@ namespace WpUI
             lfMenu.sliderTimequantum.Visibility = Visibility.Hidden;
             tableProcess.UnselectAll();
             set_color( false );
-            ChangeTables();
         }
         /* Priority */
         private void Item5_Clicked()
@@ -184,7 +180,6 @@ namespace WpUI
             lfMenu.sliderTimequantum.Visibility = Visibility.Hidden;
             tableProcess.UnselectAll();
             set_color( true );
-            ChangeTables();
         }
         /* Round-Robin */
         private void Item6_Clicked()
@@ -196,7 +191,6 @@ namespace WpUI
             lfMenu.sliderTimequantum.Visibility = Visibility.Visible;
             tableProcess.UnselectAll();
             set_color( false );
-            ChangeTables();
         }
 
         /* Run */
@@ -331,6 +325,7 @@ namespace WpUI
         /* Wait Chart Update */
         private void WaitUpdate()
         {
+            double checking = 0.0;
             string[] name = new string[] { "FCFS", "SJF", "SRT", "HRN", "Priority", "Round-Robin" };
             chartWait.Series.Clear();
 
@@ -340,11 +335,17 @@ namespace WpUI
             for ( int i = 0; i < wait_time.Length; i++ )
             {
                 seriesPie.Points.AddXY( name[ i ], wait_time[ i ] );
+                checking += wait_time[ i ];
             }
             
             chartWait.Series.Add( seriesPie );
             chartWait.Series[ 0 ].IsValueShownAsLabel = true;
             chartWait.Update();
+
+            if ( checking == 0 )
+            {
+                MessageBox.Show( "모든 기법의 평균대기시간이 0 이므로,\n평균대기시간 차트가 나타나지 않습니다.", "정보", MessageBoxButton.OK, MessageBoxImage.Information );
+            }
         }
 
         /* Return Time Chart Update */
@@ -390,7 +391,7 @@ namespace WpUI
         /* When No Running */
         private void ChangeTables()
         {
-            foreach(var i in data )
+            foreach ( var i in data )
             {
                 i.wait_time = i.return_time = "-";
             }
