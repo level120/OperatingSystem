@@ -50,6 +50,8 @@ namespace AlgorithmTest
         {
             if ( Convert.ToInt32( A.priority ) > Convert.ToInt32( B.priority ) )
                 return -1;
+            if ( Convert.ToInt32( A.priority ) == Convert.ToInt32( B.priority ) )
+                return 0;
             return 1;
         }
 
@@ -57,6 +59,9 @@ namespace AlgorithmTest
         private static int Follow_HRN( Cal_Temp A, Cal_Temp B )
         {
             if ( Convert.ToInt32( A.respone_value ) >= Convert.ToInt32( B.respone_value ) )
+                return -1;
+            if ( ( Convert.ToInt32( A.respone_value ) == Convert.ToInt32( B.respone_value ) ) &&
+                ( Convert.ToInt32( A.pid ) < Convert.ToInt32( B.pid ) ) )
                 return -1;
             return 1;
         }
